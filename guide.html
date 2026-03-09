@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Степени окисления — Визуальный гайд</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --warm: #fff8f0;
+  --cream: #fef3e2;
+  --peach: #fed7aa;
+  --coral: #fb7185;
+  --blue: #38bdf8;
+  --indigo: #818cf8;
+  --green: #4ade80;
+  --dark: #1e1b4b;
+  --text: #3f3f46;
+  --text-light: #71717a;
+  --yellow: #fbbf24;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--warm);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--peach); border-radius: 4px; }
+
+.container { max-width: 700px; margin: 0 auto; padding: 20px; }
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  background: linear-gradient(135deg, var(--coral), #f472b6);
+  color: white;
+  border-radius: 30px;
+  font-size: .8em;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: 2.8em;
+  font-weight: 900;
+  color: var(--dark);
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, var(--coral), var(--indigo));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.15em;
+  color: var(--text-light);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Floating atoms decoration */
+.atoms {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atom {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .12;
+  animation: floatAtom 8s ease-in-out infinite;
+}
+
+@keyframes floatAtom {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* STEP CARDS */
+.step {
+  margin: 40px 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all .6s cubic-bezier(.22,.61,.36,1);
+}
+
+.step.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  font-weight: 900;
+  font-size: 1.1em;
+  color: white;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.1);
+}
+
+.step-title {
+  font-size: 1.5em;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+/* Visual cards inside steps */
+.visual-card {
+  border-radius: 24px;
+  padding: 28px;
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.vc-warm {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 2px solid rgba(251,191,36,.2);
+}
+
+.vc-blue {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border: 2px solid rgba(59,130,246,.15);
+}
+
+.vc-green {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border: 2px solid rgba(34,197,94,.15);
+}
+
+.vc-pink {
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  border: 2px solid rgba(236,72,153,.15);
+}
+
+.vc-purple {
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  border: 2px solid rgba(139,92,246,.15);
+}
+
+.vc-dark {
+  background: linear-gradient(135deg, var(--dark), #312e81);
+  border: none;
+  color: white;
+}
+
+/* Rule cards */
+.rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px;
+  background: white;
+  border-radius: 18px;
+  margin: 12px 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+  transition: transform .2s;
+}
+
+.rule:hover { transform: translateX(4px); }
+
+.rule-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  flex-shrink: 0;
+}
+
+.rule-content { flex: 1; }
+.rule-label { font-weight: 800; font-size: 1em; margin-bottom: 4px; }
+.rule-desc { font-size: .92em; color: var(--text-light); line-height: 1.5; }
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: .88em;
+}
+
+.tag-red { background: rgba(251,113,133,.15); color: #e11d48; }
+.tag-blue { background: rgba(56,189,248,.15); color: #0284c7; }
+.tag-green { background: rgba(74,222,128,.15); color: #16a34a; }
+.tag-yellow { background: rgba(251,191,36,.2); color: #a16207; }
+.tag-purple { background: rgba(129,140,248,.15); color: #6366f1; }
+
+/* Example blocks */
+.example-box {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin: 16px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,.05);
+  border-left: 5px solid;
+}
+
+.example-box.ex-coral { border-color: var(--coral); }
+.example-box.ex-blue { border-color: var(--blue); }
+.example-box.ex-green { border-color: var(--green); }
+.example-box.ex-indigo { border-color: var(--indigo); }
+
+.ex-label {
+  font-size: .75em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  opacity: .6;
+}
+
+.ex-formula {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: center;
+  margin: 12px 0;
+}
+
+.ex-formula .above {
+  font-size: .55em;
+  vertical-align: super;
+  color: var(--coral);
+  font-weight: 800;
+}
+
+.ex-steps {
+  list-style: none;
+  padding: 0;
+}
+
+.ex-steps li {
+  padding: 8px 0;
+  padding-left: 28px;
+  position: relative;
+  font-size: .95em;
+  line-height: 1.6;
+}
+
+.ex-steps li::before {
+  content: attr(data-n);
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7em;
+  font-weight: 800;
+  top: 10px;
+}
+
+.equation-line {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(0,0,0,.04);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  font-size: .95em;
+  font-weight: 600;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* Handwritten style annotations */
+.handwritten {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+.hw-coral { color: var(--coral); }
+.hw-blue { color: #2563eb; }
+.hw-green { color: #16a34a; }
+
+/* Big emoji illustration */
+.big-illustration {
+  text-align: center;
+  font-size: 4em;
+  margin: 20px 0;
+  line-height: 1;
+}
+
+/* Metaphor card */
+.metaphor {
+  background: white;
+  border-radius: 22px;
+  padding: 26px;
+  margin: 16px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.metaphor-icon { font-size: 3em; flex-shrink: 0; }
+
+.metaphor-text { flex: 1; }
+.metaphor-text .title { font-weight: 800; font-size: 1.05em; margin-bottom: 4px; }
+.metaphor-text .desc { color: var(--text-light); font-size: .92em; }
+
+/* Cheat sheet grid */
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.cheat-cell {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 14px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+  transition: transform .2s;
+}
+
+.cheat-cell:hover { transform: translateY(-4px); }
+.cheat-el { font-family: 'JetBrains Mono', monospace; font-size: 1.3em; font-weight: 800; }
+.cheat-val { font-family: 'JetBrains Mono', monospace; font-size: 1.1em; font-weight: 700; margin-top: 4px; }
+.cheat-note { font-size: .75em; color: var(--text-light); margin-top: 4px; }
+
+/* Interactive try-it section */
+.try-it {
+  background: white;
+  border-radius: 22px;
+  padding: 28px;
+  margin: 16px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+}
+
+.try-formula {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3em;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 14px;
+}
+
+.try-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.try-row label {
+  font-weight: 700;
+  min-width: 30px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.try-input {
+  width: 56px;
+  height: 40px;
+  border-radius: 12px;
+  border: 2.5px solid #e5e7eb;
+  background: #fafafa;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1em;
+  font-weight: 700;
+  outline: none;
+  transition: all .3s;
+  color: var(--dark);
+}
+
+.try-input:focus {
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 4px rgba(129,140,248,.15);
+}
+
+.try-input.correct {
+  border-color: var(--green);
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.try-input.wrong {
+  border-color: var(--coral);
+  background: #fff1f2;
+  color: #e11d48;
+}
+
+.try-hint {
+  font-size: .85em;
+  color: var(--text-light);
+  padding: 8px 14px;
+  background: #f9fafb;
+  border-radius: 10px;
+  margin-top: 10px;
+  display: none;
+  line-height: 1.6;
+}
+
+.try-hint.show { display: block; animation: fadeIn .3s; }
+
+.try-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 24px;
+  border-radius: 12px;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .9em;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+.btn-coral { background: linear-gradient(135deg, var(--coral), #f472b6); color: white; box-shadow: 0 4px 14px rgba(251,113,133,.25); }
+.btn-coral:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(251,113,133,.35); }
+.btn-ghost { background: #f3f4f6; color: var(--text); }
+.btn-ghost:hover { background: #e5e7eb; }
+
+.result-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: .88em;
+  margin-top: 10px;
+}
+
+.badge-success { background: #dcfce7; color: #16a34a; }
+.badge-error { background: #ffe4e6; color: #e11d48; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Difficulty indicator */
+.difficulty {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.diff-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e5e7eb;
+}
+
+.diff-dot.active { background: var(--coral); }
+
+/* Arrow connector between steps */
+.step-arrow {
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--peach);
+  margin: -10px 0;
+}
+
+/* Summary box */
+.summary-card {
+  background: linear-gradient(135deg, var(--dark), #312e81);
+  color: white;
+  border-radius: 24px;
+  padding: 32px;
+  margin: 16px 0;
+}
+
+.summary-card h3 {
+  font-size: 1.2em;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-step {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  align-items: flex-start;
+}
+
+.summary-step:last-child { border: none; }
+
+.summary-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: .85em;
+  flex-shrink: 0;
+}
+
+.summary-text { font-size: .95em; color: rgba(255,255,255,.85); line-height: 1.5; }
+.summary-text strong { color: white; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-light);
+  font-size: .9em;
+}
+
+.footer a {
+  color: var(--coral);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 2em; }
+  .metaphor { flex-direction: column; text-align: center; }
+  .visual-card { padding: 22px; }
+  .example-box { padding: 20px; }
+  .ex-formula { font-size: 1.15em; }
+  .cheat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="atoms">
+      <div class="atom" style="width:80px;height:80px;background:var(--peach);top:10%;left:5%;animation-delay:0s"></div>
+      <div class="atom" style="width:50px;height:50px;background:var(--blue);top:15%;right:10%;animation-delay:2s"></div>
+      <div class="atom" style="width:60px;height:60px;background:var(--indigo);bottom:20%;left:8%;animation-delay:4s"></div>
+      <div class="atom" style="width:40px;height:40px;background:var(--green);bottom:10%;right:15%;animation-delay:1s"></div>
+    </div>
+    <div class="hero-badge">Гайд для начинающих</div>
+    <h1>Степени окисления<br><span>за 10 минут</span></h1>
+    <p class="hero-sub">Без зубрёжки, с картинками и примерами. Листай вниз — каждый шаг проще, чем кажется.</p>
+  </div>
+
+  <!-- STEP 0: WHAT IS IT -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--coral),#f472b6)">0</div>
+    <div class="step-title">А что это вообще такое?</div>
+
+    <div class="metaphor">
+      <div class="metaphor-icon">🍕</div>
+      <div class="metaphor-text">
+        <div class="title">Представь пиццу на двоих</div>
+        <div class="desc">Если один друг «жаднее» — он заберёт больше кусков. Степень окисления — это сколько «электронных кусков» условно забрал или отдал атом.</div>
+      </div>
+    </div>
+
+    <div class="visual-card vc-warm">
+      <p style="font-size:1.05em"><strong>Степень окисления</strong> — это условный заряд атома в молекуле.</p>
+      <p style="margin-top:8px;color:var(--text-light)">Это просто <strong>число со знаком</strong>: +1, −2, +6, 0... Показывает, «кто кому сколько должен» электронов.</p>
+      <p style="margin-top:12px" class="handwritten hw-coral">Не бойся — считать это проще, чем кажется!</p>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 1: THE RULES -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,#38bdf8,#6366f1)">1</div>
+    <div class="step-title">Выучи 5 правил — они решают всё</div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#fef3c7">🏠</div>
+      <div class="rule-content">
+        <div class="rule-label">Простое вещество = <span class="tag tag-yellow">0</span></div>
+        <div class="rule-desc">Na, Fe, O₂, Cl₂, H₂ — если элемент «один дома», он никому ничего не отдал.</div>
+      </div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#dbeafe">🔴</div>
+      <div class="rule-content">
+        <div class="rule-label">Кислород (O) = <span class="tag tag-red">−2</span></div>
+        <div class="rule-desc">Почти всегда. Кислород — жадина, забирает 2 электрона у всех.</div>
+      </div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#dcfce7">💧</div>
+      <div class="rule-content">
+        <div class="rule-label">Водород (H) = <span class="tag tag-green">+1</span></div>
+        <div class="rule-desc">С неметаллами (HCl, H₂O). Но с активными металлами (NaH, CaH₂) он = −1.</div>
+      </div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#ede9fe">⚙️</div>
+      <div class="rule-content">
+        <div class="rule-label">Металлы — фиксированные значения</div>
+        <div class="rule-desc">
+          Ia группа (Na, K, Li) = <span class="tag tag-purple">+1</span>&nbsp;
+          IIa (Ca, Mg, Ba) = <span class="tag tag-purple">+2</span>&nbsp;
+          Al = <span class="tag tag-purple">+3</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#fce7f3">⚖️</div>
+      <div class="rule-content">
+        <div class="rule-label">Сумма в молекуле = <span class="tag tag-red">0</span></div>
+        <div class="rule-desc">Все плюсы и минусы в молекуле должны уравновеситься до нуля. Это — твой главный инструмент!</div>
+      </div>
+    </div>
+
+    <p class="handwritten hw-blue" style="text-align:center;margin-top:16px">Вот и всё! Пять правил. Серьёзно, больше ничего не нужно.</p>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 2: CHEAT SHEET -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--green),#22d3ee)">2</div>
+    <div class="step-title">Шпаргалка — запомни эти числа</div>
+
+    <div class="cheat-grid">
+      <div class="cheat-cell">
+        <div class="cheat-el" style="color:#ef4444">O</div>
+        <div class="cheat-val" style="color:#ef4444">−2</div>
+        <div class="cheat-note">всегда*</div>
+      </div>
+      <div class="cheat-cell">
+        <div class="cheat-el" style="color:#22c55e">H</div>
+        <div class="cheat-val" style="color:#22c55e">+1</div>
+        <div class="cheat-note">обычно</div>
+      </div>
+      <div class="cheat-cell">
+        <div class="cheat-el" style="color:#6366f1">Na, K</div>
+        <div class="cheat-val" style="color:#6366f1">+1</div>
+        <div class="cheat-note">Ia группа</div>
+      </div>
+      <div class="cheat-cell">
+        <div class="cheat-el" style="color:#8b5cf6">Ca, Mg</div>
+        <div class="cheat-val" style="color:#8b5cf6">+2</div>
+        <div class="cheat-note">IIa группа</div>
+      </div>
+      <div class="cheat-cell">
+        <div class="cheat-el" style="color:#a855f7">Al</div>
+        <div class="cheat-val" style="color:#a855f7">+3</div>
+        <div class="cheat-note">всегда</div>
+      </div>
+      <div class="cheat-cell">
+        <div class="cheat-el" style="color:#f59e0b">F</div>
+        <div class="cheat-val" style="color:#f59e0b">−1</div>
+        <div class="cheat-note">самый жадный</div>
+      </div>
+    </div>
+
+    <div class="visual-card vc-pink" style="text-align:center">
+      <p class="handwritten hw-coral" style="font-size:1.4em">Простое вещество (Na, O₂, Cl₂, Fe) = 0</p>
+      <p style="margin-top:8px;font-size:.92em;color:var(--text-light)">Элемент сам по себе — «нулевой баланс», никому ничего не должен.</p>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 3: HOW TO SOLVE (easy) -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,#fbbf24,#f59e0b)">3</div>
+    <div class="step-title">Решаем простые — на автомате</div>
+
+    <div class="example-box ex-coral">
+      <div class="ex-label">Пример 1 — самый простой</div>
+      <div class="ex-formula">
+        <span class="above">+1</span>H₂<span class="above" style="color:var(--blue)">−2</span>O
+      </div>
+      <p style="text-align:center;color:var(--text-light)">Водород = +1, Кислород = −2. Готово!</p>
+      <div class="equation-line">
+        (+1)×2 + (−2)×1 = +2 − 2 = <strong>0</strong> ✓
+      </div>
+      <p class="handwritten hw-green" style="text-align:center">Сумма = 0. Сходится!</p>
+    </div>
+
+    <div class="example-box ex-blue">
+      <div class="ex-label">Пример 2 — ищем хлор</div>
+      <div class="ex-formula">
+        <span class="above">+1</span>Na<span class="above" style="color:var(--blue)">?</span>Cl
+      </div>
+      <ul class="ex-steps">
+        <li data-n="1">Na = +1 (металл Ia группы)</li>
+        <li data-n="2">Сумма = 0, значит: +1 + Cl = 0</li>
+        <li data-n="3">Cl = 0 − 1 = <strong>−1</strong> ✓</li>
+      </ul>
+    </div>
+
+    <div class="example-box ex-green">
+      <div class="ex-label">Пример 3 — ищем углерод</div>
+      <div class="ex-formula">
+        <span class="above" style="color:var(--blue)">?</span>C<span class="above" style="color:#ef4444">−2</span>O₂
+      </div>
+      <ul class="ex-steps">
+        <li data-n="1">O = −2, атомов кислорода 2</li>
+        <li data-n="2">C + (−2)×2 = 0</li>
+        <li data-n="3">C − 4 = 0 → C = <strong>+4</strong> ✓</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 4: HARDER EXAMPLES -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--indigo),#a855f7)">4</div>
+    <div class="step-title">Теперь посложнее — но тот же приём!</div>
+
+    <div class="metaphor">
+      <div class="metaphor-icon">🧩</div>
+      <div class="metaphor-text">
+        <div class="title">Всё как пазл</div>
+        <div class="desc">Знаешь всё кроме одного элемента → составляешь уравнение → находишь неизвестное. Каждый. Раз. Одинаково.</div>
+      </div>
+    </div>
+
+    <div class="example-box ex-indigo">
+      <div class="ex-label">Пример 4 — серная кислота</div>
+      <div class="ex-formula">
+        <span class="above">+1</span>H₂<span class="above" style="color:var(--indigo)">?</span>S<span class="above" style="color:#ef4444">−2</span>O₄
+      </div>
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot"></div></div>
+      <ul class="ex-steps">
+        <li data-n="1">H = +1, их 2 штуки → (+1)×2 = +2</li>
+        <li data-n="2">O = −2, их 4 штуки → (−2)×4 = −8</li>
+        <li data-n="3">S = ? Составляем: +2 + S + (−8) = 0</li>
+        <li data-n="4">S − 6 = 0 → <strong>S = +6</strong> ✓</li>
+      </ul>
+    </div>
+
+    <div class="example-box ex-coral">
+      <div class="ex-label">Пример 5 — перманганат калия</div>
+      <div class="ex-formula">
+        <span class="above">+1</span>K<span class="above" style="color:var(--indigo)">?</span>Mn<span class="above" style="color:#ef4444">−2</span>O₄
+      </div>
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot active"></div></div>
+      <ul class="ex-steps">
+        <li data-n="1">K = +1 (одна штука)</li>
+        <li data-n="2">O = −2, их 4 → (−2)×4 = −8</li>
+        <li data-n="3">+1 + Mn + (−8) = 0</li>
+        <li data-n="4">Mn − 7 = 0 → <strong>Mn = +7</strong> ✓</li>
+      </ul>
+    </div>
+
+    <div class="example-box ex-green">
+      <div class="ex-label">Пример 6 — ловушка!</div>
+      <div class="ex-formula">
+        <span class="above">+2</span>Ca<span class="above" style="color:var(--coral)">?</span>H₂
+      </div>
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot"></div></div>
+      <ul class="ex-steps">
+        <li data-n="⚠️">Стоп! Это гидрид металла — H тут = −1 (не +1!)</li>
+        <li data-n="1">Ca = +2 (IIa группа)</li>
+        <li data-n="2">+2 + (−1)×2 = +2 − 2 = <strong>0</strong> ✓</li>
+      </ul>
+      <p class="handwritten hw-coral" style="margin-top:8px">Водород = −1 только с активными металлами!</p>
+    </div>
+
+    <div class="example-box ex-blue">
+      <div class="ex-label">Пример 7 — два неизвестных атома</div>
+      <div class="ex-formula">
+        <span class="above">+1</span>K₂<span class="above" style="color:var(--indigo)">?</span>Cr₂<span class="above" style="color:#ef4444">−2</span>O₇
+      </div>
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot active"></div></div>
+      <ul class="ex-steps">
+        <li data-n="1">K = +1, их 2 → +2</li>
+        <li data-n="2">O = −2, их 7 → −14</li>
+        <li data-n="3">Cr = ?, их 2: +2 + 2×Cr + (−14) = 0</li>
+        <li data-n="4">2×Cr = 14 − 2 = 12 → Cr = <strong>+6</strong> ✓</li>
+      </ul>
+      <p style="margin-top:8px;font-size:.88em;color:var(--text-light)">Не забывай умножать на количество атомов!</p>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 5: THE ALGORITHM -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,#ec4899,var(--coral))">5</div>
+    <div class="step-title">Алгоритм — делай так каждый раз</div>
+
+    <div class="summary-card">
+      <h3>🗺️ Чеклист на каждую задачу</h3>
+      <div class="summary-step">
+        <div class="summary-num">1</div>
+        <div class="summary-text"><strong>Запиши что знаешь</strong> — O = −2, H = +1, металлы</div>
+      </div>
+      <div class="summary-step">
+        <div class="summary-num">2</div>
+        <div class="summary-text"><strong>Посчитай количество</strong> атомов (индексы в формуле!)</div>
+      </div>
+      <div class="summary-step">
+        <div class="summary-num">3</div>
+        <div class="summary-text"><strong>Составь уравнение:</strong> сумма всех с.о. = 0</div>
+      </div>
+      <div class="summary-step">
+        <div class="summary-num">4</div>
+        <div class="summary-text"><strong>Реши</strong> — найди неизвестное. Готово!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 6: TRY IT -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--green),#22d3ee)">6</div>
+    <div class="step-title">Попробуй сам!</div>
+
+    <p style="color:var(--text-light);margin-bottom:16px">Впиши числа со знаком (например +2 или −1). Начнём с лёгких:</p>
+
+    <div class="try-it" id="try1">
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot"></div><div class="diff-dot"></div></div>
+      <div class="try-formula">MgO</div>
+      <div class="try-row"><label>Mg:</label><input class="try-input" data-ans="+2" maxlength="3"><label style="margin-left:16px">O:</label><input class="try-input" data-ans="-2" maxlength="3"></div>
+      <div class="try-btns">
+        <button class="btn btn-coral" onclick="checkTry('try1')">Проверить</button>
+        <button class="btn btn-ghost" onclick="hintTry('try1','Mg — IIa группа → +2. O → −2. Проверка: +2 + (−2) = 0 ✓')">Подсказка</button>
+      </div>
+      <div class="try-hint" id="try1-hint"></div>
+    </div>
+
+    <div class="try-it" id="try2">
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot"></div><div class="diff-dot"></div></div>
+      <div class="try-formula">HCl</div>
+      <div class="try-row"><label>H:</label><input class="try-input" data-ans="+1" maxlength="3"><label style="margin-left:16px">Cl:</label><input class="try-input" data-ans="-1" maxlength="3"></div>
+      <div class="try-btns">
+        <button class="btn btn-coral" onclick="checkTry('try2')">Проверить</button>
+        <button class="btn btn-ghost" onclick="hintTry('try2','H = +1. Сумма = 0, значит Cl = −1.')">Подсказка</button>
+      </div>
+      <div class="try-hint" id="try2-hint"></div>
+    </div>
+
+    <div class="try-it" id="try3">
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot"></div></div>
+      <div class="try-formula">CO₂</div>
+      <div class="try-row"><label>C:</label><input class="try-input" data-ans="+4" maxlength="3"><label style="margin-left:16px">O:</label><input class="try-input" data-ans="-2" maxlength="3"></div>
+      <div class="try-btns">
+        <button class="btn btn-coral" onclick="checkTry('try3')">Проверить</button>
+        <button class="btn btn-ghost" onclick="hintTry('try3','O = −2, их 2 → всего −4. C + (−4) = 0 → C = +4.')">Подсказка</button>
+      </div>
+      <div class="try-hint" id="try3-hint"></div>
+    </div>
+
+    <div class="try-it" id="try4">
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot"></div></div>
+      <div class="try-formula">HNO₃</div>
+      <div class="try-row"><label>H:</label><input class="try-input" data-ans="+1" maxlength="3"><label style="margin-left:12px">N:</label><input class="try-input" data-ans="+5" maxlength="3"><label style="margin-left:12px">O:</label><input class="try-input" data-ans="-2" maxlength="3"></div>
+      <div class="try-btns">
+        <button class="btn btn-coral" onclick="checkTry('try4')">Проверить</button>
+        <button class="btn btn-ghost" onclick="hintTry('try4','H = +1, O = −2. Уравнение: +1 + N + (−2)×3 = 0 → N + 1 − 6 = 0 → N = +5.')">Подсказка</button>
+      </div>
+      <div class="try-hint" id="try4-hint"></div>
+    </div>
+
+    <div class="try-it" id="try5">
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot active"></div></div>
+      <div class="try-formula">Na₂SO₃</div>
+      <div class="try-row"><label>Na:</label><input class="try-input" data-ans="+1" maxlength="3"><label style="margin-left:12px">S:</label><input class="try-input" data-ans="+4" maxlength="3"><label style="margin-left:12px">O:</label><input class="try-input" data-ans="-2" maxlength="3"></div>
+      <div class="try-btns">
+        <button class="btn btn-coral" onclick="checkTry('try5')">Проверить</button>
+        <button class="btn btn-ghost" onclick="hintTry('try5','Na = +1, O = −2. Уравнение: (+1)×2 + S + (−2)×3 = 0 → 2 + S − 6 = 0 → S = +4.')">Подсказка</button>
+      </div>
+      <div class="try-hint" id="try5-hint"></div>
+    </div>
+
+    <div class="try-it" id="try6">
+      <div class="difficulty"><div class="diff-dot active"></div><div class="diff-dot active"></div><div class="diff-dot active"></div></div>
+      <div class="try-formula">K₂Cr₂O₇</div>
+      <div class="try-row"><label>K:</label><input class="try-input" data-ans="+1" maxlength="3"><label style="margin-left:12px">Cr:</label><input class="try-input" data-ans="+6" maxlength="3"><label style="margin-left:12px">O:</label><input class="try-input" data-ans="-2" maxlength="3"></div>
+      <div class="try-btns">
+        <button class="btn btn-coral" onclick="checkTry('try6')">Проверить</button>
+        <button class="btn btn-ghost" onclick="hintTry('try6','K = +1 (×2 = +2), O = −2 (×7 = −14). Уравнение: +2 + 2×Cr − 14 = 0 → 2Cr = 12 → Cr = +6.')">Подсказка</button>
+      </div>
+      <div class="try-hint" id="try6-hint"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Разобрался? Теперь <a href="index.html">потренируйся</a> или <a href="test.html">пройди тест</a>!</p>
+  </div>
+
+</div>
+
+<script>
+// Scroll reveal
+const steps = document.querySelectorAll('.step');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+steps.forEach(s => observer.observe(s));
+
+// Check try-it exercises
+function checkTry(id) {
+  const box = document.getElementById(id);
+  const inputs = box.querySelectorAll('.try-input');
+  let allCorrect = true;
+  inputs.forEach(inp => {
+    const val = inp.value.trim().replace('−', '-').replace('–', '-');
+    const ans = inp.dataset.ans;
+    if (val === ans || val === ans.replace('+', '')) {
+      inp.classList.remove('wrong');
+      inp.classList.add('correct');
+    } else {
+      if (val !== '') { inp.classList.remove('correct'); inp.classList.add('wrong'); }
+      allCorrect = false;
+    }
+  });
+
+  // Remove old badges
+  box.querySelectorAll('.result-badge').forEach(b => b.remove());
+
+  if (allCorrect) {
+    const badge = document.createElement('div');
+    badge.className = 'result-badge badge-success';
+    badge.textContent = '✅ Правильно!';
+    box.querySelector('.try-btns').after(badge);
+  } else {
+    const filled = [...inputs].some(i => i.value.trim() !== '');
+    if (filled) {
+      const badge = document.createElement('div');
+      badge.className = 'result-badge badge-error';
+      badge.textContent = '❌ Есть ошибки — попробуй ещё!';
+      box.querySelector('.try-btns').after(badge);
+    }
+  }
+}
+
+function hintTry(id, text) {
+  const hint = document.getElementById(id + '-hint');
+  hint.textContent = '💡 ' + text;
+  hint.classList.add('show');
+}
+</script>
+</body>
+</html>
