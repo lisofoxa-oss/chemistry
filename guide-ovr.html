@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ОВР или нет? — Визуальный гайд</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0fdf4;
+  --mint: #d1fae5;
+  --teal: #14b8a6;
+  --emerald: #10b981;
+  --sky: #38bdf8;
+  --violet: #8b5cf6;
+  --rose: #fb7185;
+  --amber: #f59e0b;
+  --dark: #0f172a;
+  --text: #334155;
+  --text-light: #64748b;
+  --white: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--mint); }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 4px; }
+
+.container { max-width: 700px; margin: 0 auto; padding: 20px; }
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  background: linear-gradient(135deg, var(--teal), var(--emerald));
+  color: white;
+  border-radius: 30px;
+  font-size: .8em;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: 2.7em;
+  font-weight: 900;
+  color: var(--dark);
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, var(--teal), var(--sky));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.12em;
+  color: var(--text-light);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Floating blobs */
+.blobs {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .1;
+  animation: blobFloat 10s ease-in-out infinite;
+}
+
+@keyframes blobFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-25px) scale(1.05); }
+}
+
+/* Steps */
+.step {
+  margin: 40px 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all .6s cubic-bezier(.22,.61,.36,1);
+}
+
+.step.visible { opacity: 1; transform: translateY(0); }
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  font-weight: 900;
+  font-size: 1.1em;
+  color: white;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.1);
+}
+
+.step-title {
+  font-size: 1.5em;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+.step-arrow {
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--teal);
+  margin: -10px 0;
+  opacity: .4;
+}
+
+/* Cards */
+.card {
+  border-radius: 24px;
+  padding: 28px;
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-teal { background: linear-gradient(135deg, #ccfbf1, #99f6e4); border: 2px solid rgba(20,184,166,.15); }
+.card-sky { background: linear-gradient(135deg, #e0f2fe, #bae6fd); border: 2px solid rgba(56,189,248,.15); }
+.card-rose { background: linear-gradient(135deg, #ffe4e6, #fecdd3); border: 2px solid rgba(251,113,133,.15); }
+.card-amber { background: linear-gradient(135deg, #fef3c7, #fde68a); border: 2px solid rgba(245,158,11,.15); }
+.card-violet { background: linear-gradient(135deg, #ede9fe, #ddd6fe); border: 2px solid rgba(139,92,246,.15); }
+.card-dark { background: linear-gradient(135deg, var(--dark), #1e293b); border: none; color: white; }
+
+/* Metaphor cards */
+.metaphor {
+  background: white;
+  border-radius: 22px;
+  padding: 26px;
+  margin: 16px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,.05);
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.metaphor-icon { font-size: 3em; flex-shrink: 0; }
+.metaphor-text { flex: 1; }
+.metaphor-text .title { font-weight: 800; font-size: 1.05em; margin-bottom: 4px; color: var(--dark); }
+.metaphor-text .desc { color: var(--text-light); font-size: .92em; }
+
+/* Comparison layout */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 16px 0;
+}
+
+.compare-box {
+  background: white;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.04);
+  text-align: center;
+  border-top: 5px solid;
+  transition: transform .2s;
+}
+
+.compare-box:hover { transform: translateY(-4px); }
+
+.compare-box.yes { border-color: var(--emerald); }
+.compare-box.no { border-color: var(--rose); }
+
+.compare-icon { font-size: 2.2em; margin-bottom: 8px; }
+.compare-label { font-weight: 800; font-size: 1.1em; margin-bottom: 6px; }
+.compare-desc { font-size: .85em; color: var(--text-light); line-height: 1.5; }
+
+/* Example blocks */
+.example {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin: 14px 0;
+  box-shadow: 0 4px 18px rgba(0,0,0,.05);
+  border-left: 5px solid;
+}
+
+.example.ex-yes { border-color: var(--emerald); }
+.example.ex-no { border-color: var(--rose); }
+.example.ex-blue { border-color: var(--sky); }
+.example.ex-violet { border-color: var(--violet); }
+
+.ex-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 8px;
+  font-size: .72em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+.badge-ovr { background: rgba(16,185,129,.12); color: var(--emerald); }
+.badge-not { background: rgba(251,113,133,.12); color: var(--rose); }
+
+.formula {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.15em;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: center;
+  margin: 10px 0;
+  padding: 14px;
+  background: rgba(0,0,0,.03);
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
+.formula .so {
+  font-size: .6em;
+  vertical-align: super;
+  font-weight: 800;
+}
+
+.formula .so-changed { color: var(--emerald); }
+.formula .so-same { color: var(--text-light); }
+
+.explain-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 8px 0;
+}
+
+.explain-emoji { font-size: 1.3em; flex-shrink: 0; margin-top: 2px; }
+.explain-text { font-size: .92em; color: var(--text-light); line-height: 1.6; }
+.explain-text strong { color: var(--text); }
+
+.handwritten {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+.hw-teal { color: var(--teal); }
+.hw-rose { color: var(--rose); }
+.hw-violet { color: var(--violet); }
+
+/* Rules */
+.rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px;
+  background: white;
+  border-radius: 18px;
+  margin: 12px 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+  transition: transform .2s;
+}
+
+.rule:hover { transform: translateX(4px); }
+
+.rule-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4em;
+  flex-shrink: 0;
+}
+
+.rule-content { flex: 1; }
+.rule-label { font-weight: 800; margin-bottom: 4px; }
+.rule-desc { font-size: .9em; color: var(--text-light); line-height: 1.5; }
+
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: .85em;
+}
+
+.tag-green { background: rgba(16,185,129,.12); color: #059669; }
+.tag-red { background: rgba(251,113,133,.12); color: #e11d48; }
+
+/* Checklist algorithm card */
+.algo-card {
+  background: linear-gradient(135deg, var(--dark), #1e293b);
+  color: white;
+  border-radius: 24px;
+  padding: 30px;
+  margin: 16px 0;
+}
+
+.algo-card h3 {
+  font-size: 1.2em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.algo-step {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  align-items: flex-start;
+}
+
+.algo-step:last-child { border: none; }
+
+.algo-num {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: .85em;
+  flex-shrink: 0;
+}
+
+.algo-text { font-size: .95em; color: rgba(255,255,255,.85); line-height: 1.5; }
+.algo-text strong { color: white; }
+
+/* Quick-check signs */
+.signs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 16px 0;
+}
+
+.sign-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.04);
+  text-align: center;
+  transition: transform .2s;
+}
+
+.sign-card:hover { transform: translateY(-3px); }
+.sign-icon { font-size: 2em; margin-bottom: 6px; }
+.sign-label { font-weight: 800; font-size: .92em; margin-bottom: 4px; }
+.sign-desc { font-size: .82em; color: var(--text-light); line-height: 1.4; }
+
+/* Interactive practice */
+.practice {
+  background: white;
+  border-radius: 22px;
+  padding: 26px;
+  margin: 14px 0;
+  box-shadow: 0 4px 18px rgba(0,0,0,.05);
+}
+
+.practice-formula {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: center;
+  padding: 14px;
+  background: rgba(0,0,0,.03);
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.practice-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.p-btn {
+  padding: 12px 28px;
+  border-radius: 14px;
+  border: 2.5px solid #e2e8f0;
+  background: white;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .95em;
+  cursor: pointer;
+  transition: all .25s;
+  color: var(--text);
+}
+
+.p-btn:hover { border-color: #94a3b8; transform: translateY(-2px); }
+.p-btn.correct { border-color: var(--emerald); background: #ecfdf5; color: #059669; }
+.p-btn.wrong { border-color: var(--rose); background: #fff1f2; color: #e11d48; }
+.p-btn.disabled { pointer-events: none; opacity: .6; }
+.p-btn.disabled.correct { opacity: 1; }
+
+.practice-explain {
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-top: 12px;
+  font-size: .9em;
+  line-height: 1.6;
+  display: none;
+}
+
+.practice-explain.show { display: block; animation: fadeIn .3s; }
+.practice-explain.right { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.practice-explain.wrong { background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; }
+.practice-explain strong { color: var(--dark); }
+
+.difficulty { display: flex; gap: 4px; margin-bottom: 8px; }
+.diff-dot { width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0; }
+.diff-dot.on { background: var(--teal); }
+
+.btn-reset {
+  display: block;
+  margin: 20px auto 0;
+  padding: 12px 28px;
+  border-radius: 14px;
+  border: 2.5px solid rgba(20,184,166,.25);
+  background: rgba(20,184,166,.06);
+  color: var(--teal);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .95em;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+.btn-reset:hover { background: rgba(20,184,166,.12); border-color: var(--teal); transform: translateY(-2px); }
+
+.score-mini {
+  text-align: center;
+  margin-top: 16px;
+  font-weight: 800;
+  color: var(--text-light);
+}
+
+.score-mini span { color: var(--emerald); font-family: 'JetBrains Mono', monospace; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-light);
+  font-size: .9em;
+}
+
+.footer a { color: var(--teal); text-decoration: none; font-weight: 700; }
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 2em; }
+  .compare { grid-template-columns: 1fr; }
+  .signs { grid-template-columns: 1fr; }
+  .metaphor { flex-direction: column; text-align: center; }
+  .card, .example, .practice { padding: 20px; }
+  .formula { font-size: 1em; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="blobs">
+      <div class="blob" style="width:100px;height:100px;background:var(--teal);top:8%;left:3%;animation-delay:0s"></div>
+      <div class="blob" style="width:60px;height:60px;background:var(--sky);top:12%;right:8%;animation-delay:3s"></div>
+      <div class="blob" style="width:70px;height:70px;background:var(--violet);bottom:15%;left:6%;animation-delay:5s"></div>
+      <div class="blob" style="width:45px;height:45px;background:var(--amber);bottom:8%;right:12%;animation-delay:2s"></div>
+    </div>
+    <div class="hero-badge">Гайд для начинающих</div>
+    <h1>ОВР или не ОВР?<br><span>Как отличить</span></h1>
+    <p class="hero-sub">Один простой вопрос решает всё. Разберёмся шаг за шагом — с картинками и примерами.</p>
+  </div>
+
+  <!-- STEP 0: THE CORE IDEA -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--teal),var(--emerald))">0</div>
+    <div class="step-title">Главная идея — одно предложение</div>
+
+    <div class="card card-teal" style="text-align:center">
+      <p style="font-size:1.2em;font-weight:800;color:var(--dark)">Изменились ли степени окисления?</p>
+      <p style="margin-top:10px;font-size:1em;color:var(--text-light)">Если <strong>да</strong> → это ОВР. Если <strong>нет</strong> → не ОВР.</p>
+      <p class="handwritten hw-teal" style="margin-top:12px;font-size:1.5em">Вот и весь секрет!</p>
+    </div>
+
+    <div class="metaphor">
+      <div class="metaphor-icon">🎨</div>
+      <div class="metaphor-text">
+        <div class="title">Думай о цветах</div>
+        <div class="desc">Каждый элемент имеет «цвет» — степень окисления. Если после реакции хоть один атом «сменил цвет» — это ОВР. Если все остались прежними — не ОВР.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 1: SIDE BY SIDE -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--sky),var(--violet))">1</div>
+    <div class="step-title">Два мира — ОВР и не ОВР</div>
+
+    <div class="compare">
+      <div class="compare-box yes">
+        <div class="compare-icon">⚡</div>
+        <div class="compare-label" style="color:var(--emerald)">ОВР</div>
+        <div class="compare-desc">Степени окисления <strong>изменяются</strong>. Электроны переходят от одного атома к другому.</div>
+      </div>
+      <div class="compare-box no">
+        <div class="compare-icon">🔄</div>
+        <div class="compare-label" style="color:var(--rose)">Не ОВР</div>
+        <div class="compare-desc">Степени окисления <strong>остаются</strong> прежними. Атомы просто меняются партнёрами.</div>
+      </div>
+    </div>
+
+    <div class="card card-amber" style="text-align:center">
+      <p class="handwritten hw-violet" style="font-size:1.3em">Не ОВР — это как обмен карточками.</p>
+      <p style="margin-top:6px;font-size:.92em;color:var(--text-light)">Na⁺ был с Cl⁻, Ag⁺ был с NO₃⁻. После реакции Na⁺ с NO₃⁻, Ag⁺ с Cl⁻. Все заряды те же — просто пересели!</p>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 2: HOW TO CHECK -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--amber),#f97316)">2</div>
+    <div class="step-title">Как проверить за 30 секунд</div>
+
+    <div class="algo-card">
+      <h3>🗺️ Алгоритм</h3>
+      <div class="algo-step">
+        <div class="algo-num">1</div>
+        <div class="algo-text"><strong>Расставь степени окисления</strong> всех элементов ДО и ПОСЛЕ стрелки</div>
+      </div>
+      <div class="algo-step">
+        <div class="algo-num">2</div>
+        <div class="algo-text"><strong>Сравни</strong> — изменилась ли хоть одна степень окисления?</div>
+      </div>
+      <div class="algo-step">
+        <div class="algo-num">3</div>
+        <div class="algo-text">Если <strong>да</strong> → ОВР ⚡ &nbsp; Если <strong>нет</strong> → не ОВР 🔄</div>
+      </div>
+    </div>
+
+    <div class="metaphor">
+      <div class="metaphor-icon">🔍</div>
+      <div class="metaphor-text">
+        <div class="title">Совет</div>
+        <div class="desc">Не обязательно считать все степени окисления. Ищи «подозрительных» — элементы, которые были простыми веществами (с.о. = 0) и стали частью соединения. Это верный знак ОВР!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 3: SHORTCUT SIGNS -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--violet),#a855f7)">3</div>
+    <div class="step-title">Быстрые подсказки — без расчётов</div>
+
+    <p style="color:var(--text-light);margin-bottom:14px">Часто можно определить ОВР даже не считая степени окисления:</p>
+
+    <div class="signs">
+      <div class="sign-card">
+        <div class="sign-icon">🧱</div>
+        <div class="sign-label" style="color:var(--emerald)">Простое вещество</div>
+        <div class="sign-desc">Если в реакции есть Na, Fe, O₂, Cl₂, H₂ — скорее всего ОВР. Элемент из с.о.=0 перейдёт в другую.</div>
+      </div>
+      <div class="sign-card">
+        <div class="sign-icon">🔄</div>
+        <div class="sign-label" style="color:var(--rose)">Обмен ионами</div>
+        <div class="sign-desc">Если соль + соль, соль + кислота, кислота + основание — обычно НЕ ОВР.</div>
+      </div>
+      <div class="sign-card">
+        <div class="sign-icon">🔥</div>
+        <div class="sign-label" style="color:var(--emerald)">Горение</div>
+        <div class="sign-desc">Всё, что горит — ОВР. Вещество соединяется с O₂ (кислород меняет с.о.).</div>
+      </div>
+      <div class="sign-card">
+        <div class="sign-icon">💧</div>
+        <div class="sign-label" style="color:var(--rose)">Нейтрализация</div>
+        <div class="sign-desc">Кислота + основание = соль + вода. Это обмен — НЕ ОВР.</div>
+      </div>
+    </div>
+
+    <div class="card card-violet" style="text-align:center">
+      <p class="handwritten hw-violet" style="font-size:1.3em">⚠️ Но подсказки могут подвести!</p>
+      <p style="margin-top:6px;font-size:.9em;color:var(--text-light)">Например, разложение CaCO₃ → CaO + CO₂ выглядит как что-то серьёзное, но с.о. не меняются. Поэтому при сомнениях — <strong>считай степени окисления</strong>!</p>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 4: EXAMPLES - OVR -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--emerald),#22d3ee)">4</div>
+    <div class="step-title">Примеры ОВР — пошагово</div>
+
+    <div class="example ex-yes">
+      <div class="ex-badge badge-ovr">⚡ ОВР</div>
+      <div class="formula">
+        <span class="so so-changed">0</span>2Na + <span class="so so-same">+1</span>2H₂<span class="so so-same">-2</span>O → 2Na<span class="so so-changed">+1</span>OH + <span class="so so-changed">0</span>H₂
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">🔺</div>
+        <div class="explain-text"><strong>Na: 0 → +1</strong> — отдал электрон, с.о. повысилась</div>
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">🔻</div>
+        <div class="explain-text"><strong>H: +1 → 0</strong> (в H₂) — принял электрон, с.о. понизилась</div>
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">✅</div>
+        <div class="explain-text">С.о. изменились → <strong>это ОВР!</strong></div>
+      </div>
+      <p class="handwritten hw-teal" style="text-align:center;margin-top:8px">Подсказка: Na — простое вещество (с.о.=0) → явный признак ОВР</p>
+    </div>
+
+    <div class="example ex-yes">
+      <div class="ex-badge badge-ovr">⚡ ОВР</div>
+      <div class="formula">
+        <span class="so so-changed">+4</span>2SO₂ + <span class="so so-changed">0</span>O₂ → 2<span class="so so-changed">+6</span>S<span class="so so-same">-2</span>O₃
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">🔺</div>
+        <div class="explain-text"><strong>S: +4 → +6</strong> — повысилась</div>
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">🔻</div>
+        <div class="explain-text"><strong>O₂: 0 → −2</strong> — понизилась</div>
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">✅</div>
+        <div class="explain-text"><strong>ОВР.</strong> O₂ — простое вещество, сразу подсказка!</div>
+      </div>
+    </div>
+
+    <div class="example ex-yes">
+      <div class="ex-badge badge-ovr">⚡ ОВР</div>
+      <div class="formula">
+        <span class="so so-changed">0</span>Zn + <span class="so so-changed">+2</span>Cu<span class="so so-same">+6</span>S<span class="so so-same">-2</span>O₄ → <span class="so so-changed">+2</span>Zn<span class="so so-same">+6</span>S<span class="so so-same">-2</span>O₄ + <span class="so so-changed">0</span>Cu
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">🔺</div>
+        <div class="explain-text"><strong>Zn: 0 → +2</strong>, <strong>Cu: +2 → 0</strong></div>
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">💡</div>
+        <div class="explain-text">S и O не изменились — «пересели» вместе с сульфат-ионом. Но Zn и Cu изменились → <strong>ОВР!</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 5: EXAMPLES - NOT OVR -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--rose),#f472b6)">5</div>
+    <div class="step-title">Примеры НЕ ОВР — типичные ловушки</div>
+
+    <div class="example ex-no">
+      <div class="ex-badge badge-not">🔄 НЕ ОВР</div>
+      <div class="formula">
+        <span class="so so-same">+1</span>Na<span class="so so-same">-1</span>Cl + <span class="so so-same">+1</span>Ag<span class="so so-same">+5</span>N<span class="so so-same">-2</span>O₃ → <span class="so so-same">+1</span>Na<span class="so so-same">+5</span>N<span class="so so-same">-2</span>O₃ + <span class="so so-same">+1</span>Ag<span class="so so-same">-1</span>Cl
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">🔄</div>
+        <div class="explain-text">Na(+1), Cl(−1), Ag(+1), N(+5), O(−2) — <strong>всё осталось прежним!</strong></div>
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">💡</div>
+        <div class="explain-text">Ионы просто поменялись парами. Типичная <strong>реакция обмена</strong>.</div>
+      </div>
+    </div>
+
+    <div class="example ex-no">
+      <div class="ex-badge badge-not">🔄 НЕ ОВР</div>
+      <div class="formula">
+        <span class="so so-same">+2</span>Ca<span class="so so-same">+4</span>C<span class="so so-same">-2</span>O₃ → <span class="so so-same">+2</span>Ca<span class="so so-same">-2</span>O + <span class="so so-same">+4</span>C<span class="so so-same">-2</span>O₂
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">⚠️</div>
+        <div class="explain-text"><strong>Ловушка!</strong> Выглядит как серьёзная реакция — разложение при нагревании. Но посмотри на числа:</div>
+      </div>
+      <div class="explain-row">
+        <div class="explain-emoji">🔍</div>
+        <div class="explain-text">Ca(+2→+2), C(+4→+4), O(−2→−2) — <strong>ничего не изменилось!</strong></div>
+      </div>
+      <p class="handwritten hw-rose" style="text-align:center;margin-top:8px">Не всё, что разлагается — ОВР!</p>
+    </div>
+
+    <div class="example ex-no">
+      <div class="ex-badge badge-not">🔄 НЕ ОВР</div>
+      <div class="formula">NaOH + HCl → NaCl + H₂O</div>
+      <div class="explain-row">
+        <div class="explain-emoji">🧪</div>
+        <div class="explain-text"><strong>Нейтрализация</strong> — кислота + основание = соль + вода. Na(+1), O(−2), H(+1), Cl(−1) — без изменений.</div>
+      </div>
+    </div>
+
+    <div class="example ex-no">
+      <div class="ex-badge badge-not">🔄 НЕ ОВР</div>
+      <div class="formula">CaCO₃ + 2HCl → CaCl₂ + CO₂ + H₂O</div>
+      <div class="explain-row">
+        <div class="explain-emoji">⚠️</div>
+        <div class="explain-text"><strong>Ещё ловушка!</strong> Пузырьки CO₂, бурная реакция — но Ca(+2), C(+4), O(−2), H(+1), Cl(−1) — всё на месте. Это <strong>обмен</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 6: CHEAT SHEET -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--amber),#f97316)">6</div>
+    <div class="step-title">Шпаргалка-напоминалка</div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#ecfdf5">⚡</div>
+      <div class="rule-content">
+        <div class="rule-label">Обычно ОВР:</div>
+        <div class="rule-desc">Простое вещество + что-то, горение, металл + кислота, металл + соль более слабого металла</div>
+      </div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#fff1f2">🔄</div>
+      <div class="rule-content">
+        <div class="rule-label">Обычно НЕ ОВР:</div>
+        <div class="rule-desc">Соль + соль, кислота + основание (нейтрализация), соль + кислота, оксид + вода</div>
+      </div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-icon" style="background:#fef3c7">⚠️</div>
+      <div class="rule-content">
+        <div class="rule-label">Разложение — может быть и так, и так!</div>
+        <div class="rule-desc">CaCO₃→CaO+CO₂ (не ОВР), но 2KClO₃→2KCl+3O₂ (ОВР, т.к. Cl: +5→−1, O: −2→0). Считай с.о.!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-arrow">↓</div>
+
+  <!-- STEP 7: PRACTICE -->
+  <div class="step">
+    <div class="step-number" style="background:linear-gradient(135deg,var(--teal),var(--sky))">7</div>
+    <div class="step-title">Попробуй сам!</div>
+
+    <p style="color:var(--text-light);margin-bottom:14px">Определи — ОВР или нет. После ответа появится объяснение.</p>
+
+    <div id="practiceArea"></div>
+
+    <div class="score-mini" id="scoreArea"></div>
+    <button class="btn-reset" onclick="generatePractice()">🔄 Новые реакции</button>
+  </div>
+
+  <div class="footer">
+    <p>Разобрался? <a href="guide.html">Повтори степени окисления</a> · <a href="index.html">Тренировка</a> · <a href="test.html">Финальный тест</a></p>
+  </div>
+
+</div>
+
+<script>
+// Scroll reveal
+const steps = document.querySelectorAll('.step');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+steps.forEach(s => observer.observe(s));
+
+// Practice database
+const practiceDB = [
+{eq:"2Na + Cl₂ → 2NaCl",ovr:true,exp:"Na: 0→+1, Cl: 0→−1. Простые вещества → с.о. изменились."},
+{eq:"NaCl + AgNO₃ → NaNO₃ + AgCl",ovr:false,exp:"Обмен ионами. Na(+1), Cl(−1), Ag(+1), N(+5), O(−2) — без изменений."},
+{eq:"CaCO₃ → CaO + CO₂",ovr:false,exp:"Ca(+2), C(+4), O(−2) — всё осталось. Разложение без изменения с.о."},
+{eq:"Mg + 2HCl → MgCl₂ + H₂",ovr:true,exp:"Mg: 0→+2, H: +1→0. Металл + кислота = классическая ОВР."},
+{eq:"NaOH + HCl → NaCl + H₂O",ovr:false,exp:"Нейтрализация — обмен. Na(+1), O(−2), H(+1), Cl(−1)."},
+{eq:"2H₂ + O₂ → 2H₂O",ovr:true,exp:"H: 0→+1, O: 0→−2. Горение водорода — ОВР."},
+{eq:"Fe + CuSO₄ → FeSO₄ + Cu",ovr:true,exp:"Fe: 0→+2, Cu: +2→0. Вытеснение металла."},
+{eq:"BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl",ovr:false,exp:"Обмен. Ba(+2), Cl(−1), Na(+1), S(+6), O(−2)."},
+{eq:"4Fe + 3O₂ → 2Fe₂O₃",ovr:true,exp:"Fe: 0→+3, O: 0→−2. Ржавление — ОВР."},
+{eq:"CuO + H₂SO₄ → CuSO₄ + H₂O",ovr:false,exp:"Cu(+2), O(−2), H(+1), S(+6) — без изменений. Обмен."},
+{eq:"Ca + Br₂ → CaBr₂",ovr:true,exp:"Ca: 0→+2, Br: 0→−1. Два простых вещества → явная ОВР."},
+{eq:"2Al(OH)₃ → Al₂O₃ + 3H₂O",ovr:false,exp:"Al(+3), O(−2), H(+1) — ничего не изменилось."},
+{eq:"C + O₂ → CO₂",ovr:true,exp:"C: 0→+4, O: 0→−2. Горение углерода."},
+{eq:"Cl₂ + 2KBr → 2KCl + Br₂",ovr:true,exp:"Cl: 0→−1, Br: −1→0. Более активный галоген вытесняет менее активный."},
+{eq:"K₂O + H₂O → 2KOH",ovr:false,exp:"K(+1), O(−2), H(+1) — без изменений. Присоединение."},
+{eq:"2KClO₃ → 2KCl + 3O₂",ovr:true,exp:"Cl: +5→−1, O: −2→0. Разложение С изменением с.о.!"},
+{eq:"N₂ + 3H₂ → 2NH₃",ovr:true,exp:"N: 0→−3, H: 0→+1. Из простых веществ → ОВР."},
+{eq:"Na₂CO₃ + 2HCl → 2NaCl + CO₂ + H₂O",ovr:false,exp:"Обмен. Na(+1), C(+4), O(−2), H(+1), Cl(−1)."},
+{eq:"Fe₂O₃ + 3CO → 2Fe + 3CO₂",ovr:true,exp:"Fe: +3→0, C: +2→+4. Восстановление железа."},
+{eq:"Ba(OH)₂ + H₂SO₄ → BaSO₄ + 2H₂O",ovr:false,exp:"Нейтрализация. Все с.о. сохранились."},
+{eq:"2Al + Fe₂O₃ → Al₂O₃ + 2Fe",ovr:true,exp:"Al: 0→+3, Fe: +3→0. Термит! Классическая ОВР."},
+{eq:"CaO + H₂O → Ca(OH)₂",ovr:false,exp:"Ca(+2), O(−2), H(+1). Без изменений — присоединение."},
+{eq:"2H₂O₂ → 2H₂O + O₂",ovr:true,exp:"O: −1→−2 и −1→0. Диспропорционирование!"},
+{eq:"Zn + 2HCl → ZnCl₂ + H₂",ovr:true,exp:"Zn: 0→+2, H: +1→0. Металл + кислота."},
+{eq:"FeS + 2HCl → FeCl₂ + H₂S",ovr:false,exp:"Fe(+2), S(−2), H(+1), Cl(−1). Обмен."},
+{eq:"Cu + 4HNO₃(конц) → Cu(NO₃)₂ + 2NO₂ + 2H₂O",ovr:true,exp:"Cu: 0→+2, N: +5→+4. Даже кислоты-окислители дают ОВР!"},
+{eq:"2Mg + CO₂ → 2MgO + C",ovr:true,exp:"Mg: 0→+2, C: +4→0. Магний горит даже в CO₂!"},
+{eq:"MgCO₃ → MgO + CO₂",ovr:false,exp:"Mg(+2), C(+4), O(−2). Разложение без изменения с.о."},
+{eq:"Pb(NO₃)₂ + 2KI → PbI₂ + 2KNO₃",ovr:false,exp:"Обмен. Pb(+2), N(+5), O(−2), K(+1), I(−1)."},
+{eq:"CH₄ + 2O₂ → CO₂ + 2H₂O",ovr:true,exp:"C: −4→+4, O: 0→−2. Горение метана."},
+];
+
+let pScore = {c:0, t:0};
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+function generatePractice() {
+  pScore = {c:0, t:0};
+  const items = shuffle(practiceDB).slice(0, 8);
+  const area = document.getElementById('practiceArea');
+  area.innerHTML = '';
+
+  items.forEach((item, i) => {
+    const diff = item.ovr ? (item.eq.includes('₂O₂') || item.eq.includes('KClO') ? 3 : item.eq.includes('+') && item.eq.includes('→') && !item.eq.includes('O₂ →') ? 2 : 1) : (item.eq.includes('CO₃ →') || item.eq.includes('(OH)') ? 2 : 1);
+    const id = `p-${Date.now()}-${i}`;
+    area.innerHTML += `
+    <div class="practice" id="${id}">
+      <div class="difficulty">${'<div class="diff-dot on"></div>'.repeat(Math.min(diff,3))}${'<div class="diff-dot"></div>'.repeat(3-Math.min(diff,3))}</div>
+      <div class="practice-formula">${item.eq}</div>
+      <div class="practice-btns">
+        <button class="p-btn" onclick="checkPractice('${id}',true,${item.ovr})">⚡ ОВР</button>
+        <button class="p-btn" onclick="checkPractice('${id}',false,${item.ovr})">🔄 Не ОВР</button>
+      </div>
+      <div class="practice-explain" id="${id}-exp">${item.exp}</div>
+    </div>`;
+  });
+
+  document.getElementById('scoreArea').innerHTML = '';
+}
+
+function checkPractice(id, guessedOvr, actualOvr) {
+  const box = document.getElementById(id);
+  if (box.classList.contains('answered')) return;
+  box.classList.add('answered');
+
+  const isCorrect = guessedOvr === actualOvr;
+  pScore.t++;
+  if (isCorrect) pScore.c++;
+
+  const btns = box.querySelectorAll('.p-btn');
+  btns.forEach(b => b.classList.add('disabled'));
+
+  if (isCorrect) {
+    btns.forEach(b => { if ((guessedOvr && b.textContent.includes('ОВР')) || (!guessedOvr && b.textContent.includes('Не'))) b.classList.add('correct'); });
+  } else {
+    btns.forEach(b => {
+      if ((guessedOvr && b.textContent.includes('ОВР') && !b.textContent.includes('Не')) || (!guessedOvr && b.textContent.includes('Не'))) b.classList.add('wrong');
+      if ((actualOvr && b.textContent.includes('ОВР') && !b.textContent.includes('Не')) || (!actualOvr && b.textContent.includes('Не'))) b.classList.add('correct');
+    });
+  }
+
+  const exp = document.getElementById(id + '-exp');
+  exp.classList.add('show', isCorrect ? 'right' : 'wrong');
+  exp.innerHTML = (isCorrect ? '✅ ' : '❌ ') + exp.innerHTML;
+
+  document.getElementById('scoreArea').innerHTML = `Результат: <span>${pScore.c}/${pScore.t}</span>`;
+}
+
+// Init
+generatePractice();
+</script>
+</body>
+</html>
