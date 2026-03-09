@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ОВР — Интерактивная подготовка</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0e17;--surface:#1a1930;--surface2:#232145;--accent:#ff6b6b;--accent2:#ffd93d;--accent3:#6bcb77;--accent4:#4d96ff;--text:#fffffe;--text-dim:#a7a9be}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 50%,rgba(75,0,130,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(255,107,107,.06) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(77,150,255,.06) 0%,transparent 50%);animation:bgShift 20s ease-in-out infinite alternate;z-index:0;pointer-events:none}
+@keyframes bgShift{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(-3%,-3%) rotate(3deg)}}
+.container{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:20px}
+.hero{text-align:center;padding:50px 20px 30px}
+.hero h1{font-size:2.6em;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent4));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.15;margin-bottom:10px}
+.hero .subtitle{font-size:1.1em;color:var(--text-dim);font-weight:600}
+.molecule-deco{font-size:2em;margin:14px 0;opacity:.7;letter-spacing:8px}
+.nav-tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:16px 0 28px;position:sticky;top:0;z-index:10;background:var(--bg);padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-tab{padding:10px 16px;border-radius:50px;border:2px solid rgba(255,255,255,.08);background:var(--surface);color:var(--text-dim);font-family:'Nunito',sans-serif;font-weight:700;font-size:.88em;cursor:pointer;transition:all .3s}
+.nav-tab:hover{border-color:rgba(255,255,255,.15);color:var(--text)}
+.nav-tab.active{background:linear-gradient(135deg,var(--accent),#ff8e53);border-color:transparent;color:#fff;box-shadow:0 4px 20px rgba(255,107,107,.3)}
+.section{display:none;animation:fadeIn .4s ease}.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--surface);border-radius:20px;padding:26px;margin-bottom:18px;border:1px solid rgba(255,255,255,.05);transition:all .3s}
+.card:hover{border-color:rgba(255,255,255,.1)}
+.card-title{font-size:1.15em;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.card-title .icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0}
+.theory-card{background:linear-gradient(135deg,var(--surface),var(--surface2));border-left:4px solid var(--accent4)}
+.theory-card p{color:var(--text-dim);line-height:1.8;margin-bottom:10px}
+.highlight{display:inline-block;background:rgba(77,150,255,.15);color:var(--accent4);padding:2px 10px;border-radius:6px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.key-point{display:flex;gap:12px;padding:14px;background:rgba(255,255,255,.03);border-radius:12px;margin:10px 0;align-items:flex-start}
+.key-point .emoji{font-size:1.4em;flex-shrink:0}.key-point .text{color:var(--text-dim);line-height:1.6}.key-point .text strong{color:var(--text)}
+.mnemonic{text-align:center;padding:22px;background:linear-gradient(135deg,rgba(255,107,107,.1),rgba(255,217,61,.1));border-radius:16px;margin:16px 0;border:2px dashed rgba(255,107,107,.3)}
+.mnemonic .big{font-size:1.7em;font-weight:900;margin-bottom:8px}.mnemonic .explain{color:var(--text-dim);font-size:.95em}
+.exercise{background:var(--surface);border-radius:20px;padding:26px;margin-bottom:18px;border:1px solid rgba(255,255,255,.05)}
+.exercise-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.exercise-type{font-size:.72em;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:4px 12px;border-radius:20px}
+.type-oxidation{background:rgba(255,107,107,.15);color:var(--accent)}.type-match{background:rgba(107,203,119,.15);color:var(--accent3)}
+.type-balance{background:rgba(77,150,255,.15);color:var(--accent4)}.type-yesno{background:rgba(255,217,61,.15);color:var(--accent2)}
+.exercise h3{font-size:1.05em;font-weight:700;margin-bottom:18px;line-height:1.5}
+.ox-compound{display:flex;align-items:center;gap:12px;margin:10px 0;flex-wrap:wrap}
+.ox-compound .compound-name{font-family:'JetBrains Mono',monospace;font-size:1.15em;font-weight:600;min-width:100px;color:var(--accent2)}
+.ox-input-group{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ox-input-group label{font-size:.88em;color:var(--text-dim)}
+.ox-input{width:52px;height:36px;border-radius:10px;border:2px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);color:var(--text);text-align:center;font-family:'JetBrains Mono',monospace;font-size:.95em;font-weight:600;outline:none;transition:all .3s}
+.ox-input:focus{border-color:var(--accent4);box-shadow:0 0 12px rgba(77,150,255,.2)}
+.ox-input.correct{border-color:var(--accent3);background:rgba(107,203,119,.1)}
+.ox-input.wrong{border-color:var(--accent);background:rgba(255,107,107,.1)}
+.reaction-item{padding:15px;border-radius:14px;margin-bottom:10px;background:rgba(0,0,0,.2)}
+.reaction-formula{font-family:'JetBrains Mono',monospace;font-size:.95em;margin-bottom:12px;color:var(--accent2);line-height:1.5}
+.reaction-options{display:flex;gap:8px;flex-wrap:wrap}
+.reaction-opt{padding:8px 16px;border-radius:10px;border:2px solid rgba(255,255,255,.1);background:transparent;color:var(--text-dim);font-family:'Nunito',sans-serif;font-weight:600;font-size:.88em;cursor:pointer;transition:all .25s}
+.reaction-opt:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.reaction-opt.correct{background:rgba(107,203,119,.15);border-color:var(--accent3);color:var(--accent3)}
+.reaction-opt.wrong{background:rgba(255,107,107,.15);border-color:var(--accent);color:var(--accent)}
+.yesno-statement{padding:14px;border-radius:14px;margin-bottom:10px;background:rgba(255,255,255,.03);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.yesno-statement .text{flex:1;line-height:1.5;font-size:.95em}
+.yesno-btns{display:flex;gap:6px;flex-shrink:0}
+.yn-btn{min-width:46px;height:36px;padding:0 10px;border-radius:10px;border:2px solid rgba(255,255,255,.1);background:transparent;color:var(--text-dim);font-family:'Nunito',sans-serif;font-weight:700;font-size:.82em;cursor:pointer;transition:all .25s;white-space:nowrap}
+.yn-btn:hover{border-color:rgba(255,255,255,.3);color:var(--text)}
+.yn-btn.selected-correct{background:var(--accent3);border-color:var(--accent3);color:#fff}
+.yn-btn.selected-wrong{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn{padding:11px 26px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95em;cursor:pointer;transition:all .3s}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#ff8e53);color:#fff;box-shadow:0 4px 20px rgba(255,107,107,.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(255,107,107,.35)}
+.btn-reset{background:rgba(77,150,255,.12);color:var(--accent4);border:2px solid rgba(77,150,255,.25);padding:11px 26px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95em;cursor:pointer;transition:all .3s}
+.btn-reset:hover{background:rgba(77,150,255,.2);border-color:var(--accent4);transform:translateY(-2px)}
+.btn-group{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.feedback{margin-top:14px;padding:14px 18px;border-radius:12px;font-weight:600;display:none;line-height:1.6}
+.feedback.show{display:block;animation:fadeIn .3s ease}
+.feedback.correct-fb{background:rgba(107,203,119,.1);border:1px solid rgba(107,203,119,.2);color:var(--accent3)}
+.feedback.wrong-fb{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);color:var(--accent)}
+.score-bar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--surface);border-radius:14px;margin-bottom:20px;border:1px solid rgba(255,255,255,.05)}
+.score-label{font-weight:700;color:var(--text-dim);font-size:.88em}
+.score-track{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden}
+.score-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--accent3),var(--accent2));transition:width .5s ease;width:0%}
+.score-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.05em;color:var(--accent2);min-width:50px;text-align:right}
+.explanation{margin-top:8px;padding:12px 16px;border-radius:10px;background:rgba(77,150,255,.08);color:var(--text-dim);font-size:.88em;line-height:1.6;display:none}
+.explanation.show{display:block;animation:fadeIn .3s}
+.explanation strong{color:var(--accent4)}
+.activity-table{width:100%;overflow-x:auto;margin:16px 0}
+.activity-row{display:flex;gap:2px;min-width:600px}
+.activity-cell{padding:10px 6px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.83em;font-weight:600;border-radius:8px;flex:1}
+.activity-cell.metal{background:rgba(77,150,255,.1);color:var(--accent4)}
+.activity-cell.h{background:rgba(255,107,107,.15);color:var(--accent)}
+.activity-cell.noble{background:rgba(255,217,61,.1);color:var(--accent2)}
+.round-badge{display:inline-block;background:rgba(255,217,61,.12);color:var(--accent2);padding:2px 10px;border-radius:20px;font-size:.8em;font-weight:700;margin-left:8px}
+@media(max-width:600px){.hero h1{font-size:1.9em}.nav-tab{padding:8px 12px;font-size:.78em}.card,.exercise{padding:18px}.ox-compound .compound-name{min-width:70px;font-size:1em}}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;overflow:hidden}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <div class="molecule-deco">⚗️ 🧪 ⚡</div>
+    <h1>Окислительно-восстановительные реакции</h1>
+    <p class="subtitle">Интерактивная подготовка к тесту</p>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('theory')">📖 Теория</button>
+    <button class="nav-tab" onclick="showSection('oxidation')">🔢 Ст. окисления</button>
+    <button class="nav-tab" onclick="showSection('classify')">⚡ ОВР / не ОВР</button>
+    <button class="nav-tab" onclick="showSection('roles')">🎭 Роли</button>
+    <button class="nav-tab" onclick="showSection('activity')">📊 Ряд активности</button>
+    <button class="nav-tab" onclick="showSection('electro')">🔋 Электролиз</button>
+  </div>
+
+  <!-- THEORY -->
+  <div id="theory" class="section active">
+    <div class="card theory-card">
+      <div class="card-title"><div class="icon" style="background:rgba(255,107,107,.15)">🔑</div>Что такое ОВР?</div>
+      <p>Окислительно-восстановительная реакция — реакция, в которой <strong style="color:var(--accent)">изменяются степени окисления</strong> элементов.</p>
+      <p>Если степени окисления остались прежними — это <strong>НЕ</strong> ОВР.</p>
+    </div>
+    <div class="card theory-card">
+      <div class="card-title"><div class="icon" style="background:rgba(107,203,119,.15)">⚡</div>Окисление и Восстановление</div>
+      <div class="key-point"><div class="emoji">🔺</div><div class="text"><strong>Окисление</strong> — отдача e⁻, с.о. <strong style="color:var(--accent)">повышается</strong>. Вещество = <strong style="color:var(--accent3)">восстановитель</strong>.</div></div>
+      <div class="key-point"><div class="emoji">🔻</div><div class="text"><strong>Восстановление</strong> — принятие e⁻, с.о. <strong style="color:var(--accent4)">понижается</strong>. Вещество = <strong style="color:var(--accent)">окислитель</strong>.</div></div>
+      <div class="mnemonic"><div class="big">🧠 Запоминалка</div><div class="explain"><strong style="color:var(--accent)">О</strong>кислитель — <strong style="color:var(--accent)">О</strong>тбирает e⁻ (сам восстанавливается)<br><strong style="color:var(--accent3)">В</strong>осстановитель — <strong style="color:var(--accent3)">В</strong>ыдаёт e⁻ (сам окисляется)</div></div>
+    </div>
+    <div class="card theory-card">
+      <div class="card-title"><div class="icon" style="background:rgba(255,217,61,.15)">📏</div>Степени окисления — правила</div>
+      <div class="key-point"><div class="emoji">1️⃣</div><div class="text"><strong>Простые вещества</strong> = <span class="highlight">0</span></div></div>
+      <div class="key-point"><div class="emoji">2️⃣</div><div class="text"><strong>O</strong> = <span class="highlight">−2</span> (кроме F₂O, пероксидов)</div></div>
+      <div class="key-point"><div class="emoji">3️⃣</div><div class="text"><strong>H</strong> = <span class="highlight">+1</span> с неметаллами, <span class="highlight">−1</span> с активными металлами</div></div>
+      <div class="key-point"><div class="emoji">4️⃣</div><div class="text"><strong>Металлы</strong>: Ia = +1, IIa = +2, Al = +3</div></div>
+      <div class="key-point"><div class="emoji">5️⃣</div><div class="text">Сумма с.о. в молекуле = <span class="highlight">0</span></div></div>
+    </div>
+    <div class="card theory-card">
+      <div class="card-title"><div class="icon" style="background:rgba(77,150,255,.15)">🔋</div>Гальванический элемент vs Электролиз</div>
+      <div class="key-point"><div class="emoji">⚡</div><div class="text"><strong>Гальванический элемент</strong> — ОВР сама производит ток.</div></div>
+      <div class="key-point"><div class="emoji">🔌</div><div class="text"><strong>Электролиз</strong> — ОВР под действием внешнего тока.</div></div>
+      <div class="key-point"><div class="emoji">✅</div><div class="text"><strong style="color:var(--accent)">Анод = Окисление</strong>, <strong style="color:var(--accent4)">Катод = Восстановление</strong> (всегда!)</div></div>
+    </div>
+  </div>
+
+  <!-- OXIDATION -->
+  <div id="oxidation" class="section">
+    <div class="score-bar"><span class="score-label">Раунд <span id="ox-round">1</span></span><div class="score-track"><div class="score-fill" id="ox-score-fill"></div></div><span class="score-num" id="ox-score">0/0</span></div>
+    <div id="ox-container"></div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="checkAllOx()">Проверить</button><button class="btn btn-reset" onclick="generateOx()">🔄 Новые задания</button></div>
+    <div class="feedback" id="ox-fb"></div>
+  </div>
+
+  <!-- CLASSIFY -->
+  <div id="classify" class="section">
+    <div class="score-bar"><span class="score-label">Раунд <span id="cl-round">1</span></span><div class="score-track"><div class="score-fill" id="cl-score-fill"></div></div><span class="score-num" id="cl-score">0/0</span></div>
+    <div id="cl-container"></div>
+    <div class="btn-group"><button class="btn btn-reset" onclick="generateClassify()">🔄 Новые реакции</button></div>
+  </div>
+
+  <!-- ROLES -->
+  <div id="roles" class="section">
+    <div class="score-bar"><span class="score-label">Раунд <span id="rl-round">1</span></span><div class="score-track"><div class="score-fill" id="rl-score-fill"></div></div><span class="score-num" id="rl-score">0/0</span></div>
+    <div id="rl-container"></div>
+    <div class="btn-group"><button class="btn btn-reset" onclick="generateRoles()">🔄 Новая реакция</button></div>
+  </div>
+
+  <!-- ACTIVITY -->
+  <div id="activity" class="section">
+    <div class="card theory-card">
+      <div class="card-title"><div class="icon" style="background:rgba(255,217,61,.15)">📊</div>Ряд активности металлов</div>
+      <div class="activity-table"><div class="activity-row">
+        <div class="activity-cell metal">Li</div><div class="activity-cell metal">K</div><div class="activity-cell metal">Ca</div><div class="activity-cell metal">Na</div><div class="activity-cell metal">Mg</div><div class="activity-cell metal">Al</div><div class="activity-cell metal">Zn</div><div class="activity-cell metal">Fe</div><div class="activity-cell metal">Ni</div><div class="activity-cell metal">Sn</div><div class="activity-cell metal">Pb</div><div class="activity-cell h">H</div><div class="activity-cell noble">Cu</div><div class="activity-cell noble">Hg</div><div class="activity-cell noble">Ag</div><div class="activity-cell noble">Pt</div><div class="activity-cell noble">Au</div>
+      </div></div>
+      <div class="key-point"><div class="emoji">👈</div><div class="text"><strong>Левее = активнее</strong>. Вытесняет из солей всё правее себя.</div></div>
+      <div class="key-point"><div class="emoji">⚗️</div><div class="text">До H — реагируют с разб. кислотами. После H — нет.</div></div>
+    </div>
+    <div class="score-bar"><span class="score-label">Раунд <span id="ac-round">1</span></span><div class="score-track"><div class="score-fill" id="ac-score-fill"></div></div><span class="score-num" id="ac-score">0/0</span></div>
+    <div id="ac-container"></div>
+    <div class="btn-group"><button class="btn btn-reset" onclick="generateActivity()">🔄 Новые реакции</button></div>
+  </div>
+
+  <!-- ELECTROLYSIS -->
+  <div id="electro" class="section">
+    <div class="card theory-card">
+      <div class="card-title"><div class="icon" style="background:rgba(107,203,119,.15)">🔋</div>Электролиз — что на катоде?</div>
+      <div class="key-point"><div class="emoji">🥇</div><div class="text">Металл <strong>после H</strong> (Cu, Ag, Au) → на катоде <strong>металл</strong>.</div></div>
+      <div class="key-point"><div class="emoji">💧</div><div class="text">Металл <strong>до Al вкл.</strong> → на катоде <strong>H₂</strong>.</div></div>
+      <div class="key-point"><div class="emoji">🔄</div><div class="text">Между Al и H (Zn, Fe, Ni) → и металл, и H₂.</div></div>
+    </div>
+    <div class="card theory-card">
+      <div class="card-title"><div class="icon" style="background:rgba(255,107,107,.15)">🏭</div>Рафинирование меди</div>
+      <div class="key-point"><div class="emoji">➕</div><div class="text"><strong style="color:var(--accent)">Анод</strong> — нечистая медь → растворяется.</div></div>
+      <div class="key-point"><div class="emoji">➖</div><div class="text"><strong style="color:var(--accent4)">Катод</strong> — чистая медь → осаждается. Электролит — CuSO₄.</div></div>
+    </div>
+    <div class="score-bar"><span class="score-label">Раунд <span id="el-round">1</span></span><div class="score-track"><div class="score-fill" id="el-score-fill"></div></div><span class="score-num" id="el-score">0/0</span></div>
+    <div id="el-container"></div>
+    <div class="btn-group"><button class="btn btn-reset" onclick="generateElectro()">🔄 Новые вопросы</button></div>
+  </div>
+</div>
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+// ===== DATABASES =====
+const oxDB=[
+{name:"H₂SO₄",elements:[{el:"H",ans:"+1"},{el:"S",ans:"+6"},{el:"O",ans:"-2"}]},
+{name:"Na₂O",elements:[{el:"Na",ans:"+1"},{el:"O",ans:"-2"}]},
+{name:"NH₃",elements:[{el:"N",ans:"-3"},{el:"H",ans:"+1"}]},
+{name:"KMnO₄",elements:[{el:"K",ans:"+1"},{el:"Mn",ans:"+7"},{el:"O",ans:"-2"}]},
+{name:"CaH₂",elements:[{el:"Ca",ans:"+2"},{el:"H",ans:"-1"}]},
+{name:"N₂O",elements:[{el:"N",ans:"+1"},{el:"O",ans:"-2"}]},
+{name:"SO₃",elements:[{el:"S",ans:"+6"},{el:"O",ans:"-2"}]},
+{name:"SO₂",elements:[{el:"S",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"Cr₂O₃",elements:[{el:"Cr",ans:"+3"},{el:"O",ans:"-2"}]},
+{name:"Fe₂O₃",elements:[{el:"Fe",ans:"+3"},{el:"O",ans:"-2"}]},
+{name:"HNO₃",elements:[{el:"H",ans:"+1"},{el:"N",ans:"+5"},{el:"O",ans:"-2"}]},
+{name:"H₂S",elements:[{el:"H",ans:"+1"},{el:"S",ans:"-2"}]},
+{name:"H₃PO₄",elements:[{el:"H",ans:"+1"},{el:"P",ans:"+5"},{el:"O",ans:"-2"}]},
+{name:"NaCl",elements:[{el:"Na",ans:"+1"},{el:"Cl",ans:"-1"}]},
+{name:"MgO",elements:[{el:"Mg",ans:"+2"},{el:"O",ans:"-2"}]},
+{name:"Al₂O₃",elements:[{el:"Al",ans:"+3"},{el:"O",ans:"-2"}]},
+{name:"CO₂",elements:[{el:"C",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"CO",elements:[{el:"C",ans:"+2"},{el:"O",ans:"-2"}]},
+{name:"NO₂",elements:[{el:"N",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"NO",elements:[{el:"N",ans:"+2"},{el:"O",ans:"-2"}]},
+{name:"P₂O₅",elements:[{el:"P",ans:"+5"},{el:"O",ans:"-2"}]},
+{name:"SiO₂",elements:[{el:"Si",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"K₂Cr₂O₇",elements:[{el:"K",ans:"+1"},{el:"Cr",ans:"+6"},{el:"O",ans:"-2"}]},
+{name:"CaCO₃",elements:[{el:"Ca",ans:"+2"},{el:"C",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"NaOH",elements:[{el:"Na",ans:"+1"},{el:"O",ans:"-2"},{el:"H",ans:"+1"}]},
+{name:"HCl",elements:[{el:"H",ans:"+1"},{el:"Cl",ans:"-1"}]},
+{name:"H₂O",elements:[{el:"H",ans:"+1"},{el:"O",ans:"-2"}]},
+{name:"FeCl₃",elements:[{el:"Fe",ans:"+3"},{el:"Cl",ans:"-1"}]},
+{name:"FeCl₂",elements:[{el:"Fe",ans:"+2"},{el:"Cl",ans:"-1"}]},
+{name:"CuO",elements:[{el:"Cu",ans:"+2"},{el:"O",ans:"-2"}]},
+{name:"Cu₂O",elements:[{el:"Cu",ans:"+1"},{el:"O",ans:"-2"}]},
+{name:"MnO₂",elements:[{el:"Mn",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"Na₂SO₄",elements:[{el:"Na",ans:"+1"},{el:"S",ans:"+6"},{el:"O",ans:"-2"}]},
+{name:"Na₂SO₃",elements:[{el:"Na",ans:"+1"},{el:"S",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"CaSO₄",elements:[{el:"Ca",ans:"+2"},{el:"S",ans:"+6"},{el:"O",ans:"-2"}]},
+{name:"KNO₃",elements:[{el:"K",ans:"+1"},{el:"N",ans:"+5"},{el:"O",ans:"-2"}]},
+{name:"AgNO₃",elements:[{el:"Ag",ans:"+1"},{el:"N",ans:"+5"},{el:"O",ans:"-2"}]},
+{name:"BaO",elements:[{el:"Ba",ans:"+2"},{el:"O",ans:"-2"}]},
+{name:"ZnO",elements:[{el:"Zn",ans:"+2"},{el:"O",ans:"-2"}]},
+{name:"PbO₂",elements:[{el:"Pb",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"NaH",elements:[{el:"Na",ans:"+1"},{el:"H",ans:"-1"}]},
+{name:"HBr",elements:[{el:"H",ans:"+1"},{el:"Br",ans:"-1"}]},
+{name:"HF",elements:[{el:"H",ans:"+1"},{el:"F",ans:"-1"}]},
+{name:"Cl₂O₇",elements:[{el:"Cl",ans:"+7"},{el:"O",ans:"-2"}]},
+{name:"Cl₂O",elements:[{el:"Cl",ans:"+1"},{el:"O",ans:"-2"}]},
+{name:"H₂CO₃",elements:[{el:"H",ans:"+1"},{el:"C",ans:"+4"},{el:"O",ans:"-2"}]},
+{name:"CuSO₄",elements:[{el:"Cu",ans:"+2"},{el:"S",ans:"+6"},{el:"O",ans:"-2"}]},
+{name:"ZnCl₂",elements:[{el:"Zn",ans:"+2"},{el:"Cl",ans:"-1"}]},
+{name:"Mn₂O₇",elements:[{el:"Mn",ans:"+7"},{el:"O",ans:"-2"}]},
+{name:"FeO",elements:[{el:"Fe",ans:"+2"},{el:"O",ans:"-2"}]},
+{name:"Li₂O",elements:[{el:"Li",ans:"+1"},{el:"O",ans:"-2"}]},
+{name:"BaCl₂",elements:[{el:"Ba",ans:"+2"},{el:"Cl",ans:"-1"}]},
+{name:"AlCl₃",elements:[{el:"Al",ans:"+3"},{el:"Cl",ans:"-1"}]},
+{name:"Ca(OH)₂",elements:[{el:"Ca",ans:"+2"},{el:"O",ans:"-2"},{el:"H",ans:"+1"}]},
+{name:"KOH",elements:[{el:"K",ans:"+1"},{el:"O",ans:"-2"},{el:"H",ans:"+1"}]},
+{name:"Pb(NO₃)₂",elements:[{el:"Pb",ans:"+2"},{el:"N",ans:"+5"},{el:"O",ans:"-2"}]},
+];
+
+const classifyDB=[
+{eq:"2Na + 2H₂O → 2NaOH + H₂",ovr:true,exp:"Na: 0→+1, H: +1→0."},
+{eq:"NaCl + AgNO₃ → NaNO₃ + AgCl",ovr:false,exp:"Реакция обмена. Все с.о. сохранились."},
+{eq:"CaCO₃ → CaO + CO₂",ovr:false,exp:"Ca(+2), C(+4), O(−2) — без изменений."},
+{eq:"2Al + 6HCl → 2AlCl₃ + 3H₂",ovr:true,exp:"Al: 0→+3, H: +1→0."},
+{eq:"CaCO₃ + 2HCl → CaCl₂ + CO₂ + H₂O",ovr:false,exp:"Реакция обмена, с.о. прежние."},
+{eq:"Ca + Br₂ → CaBr₂",ovr:true,exp:"Ca: 0→+2, Br: 0→−1."},
+{eq:"2SO₂ + O₂ → 2SO₃",ovr:true,exp:"S: +4→+6, O₂: 0→−2."},
+{eq:"2Al(OH)₃ → Al₂O₃ + 3H₂O",ovr:false,exp:"Al(+3), O(−2), H(+1) — без изменений."},
+{eq:"Zn + CuSO₄ → ZnSO₄ + Cu",ovr:true,exp:"Zn: 0→+2, Cu: +2→0."},
+{eq:"Fe₂O₃ + 3CO → 2Fe + 3CO₂",ovr:true,exp:"Fe: +3→0, C: +2→+4."},
+{eq:"2H₂ + O₂ → 2H₂O",ovr:true,exp:"H: 0→+1, O: 0→−2."},
+{eq:"BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl",ovr:false,exp:"Обмен ионами."},
+{eq:"2KClO₃ → 2KCl + 3O₂",ovr:true,exp:"Cl: +5→−1, O: −2→0."},
+{eq:"Mg + 2HCl → MgCl₂ + H₂",ovr:true,exp:"Mg: 0→+2, H: +1→0."},
+{eq:"NaOH + HCl → NaCl + H₂O",ovr:false,exp:"Нейтрализация — обмен."},
+{eq:"4Fe + 3O₂ → 2Fe₂O₃",ovr:true,exp:"Fe: 0→+3, O: 0→−2."},
+{eq:"Cu + 4HNO₃(конц) → Cu(NO₃)₂ + 2NO₂ + 2H₂O",ovr:true,exp:"Cu: 0→+2, N: +5→+4."},
+{eq:"AgNO₃ + NaCl → AgCl + NaNO₃",ovr:false,exp:"Обмен, с.о. постоянны."},
+{eq:"2Fe + 3Cl₂ → 2FeCl₃",ovr:true,exp:"Fe: 0→+3, Cl: 0→−1."},
+{eq:"CuO + H₂SO₄ → CuSO₄ + H₂O",ovr:false,exp:"Cu(+2), S(+6), O(−2), H(+1) — без изменений."},
+{eq:"C + O₂ → CO₂",ovr:true,exp:"C: 0→+4, O: 0→−2."},
+{eq:"CH₄ + 2O₂ → CO₂ + 2H₂O",ovr:true,exp:"C: −4→+4, O: 0→−2."},
+{eq:"Pb(NO₃)₂ + 2KI → PbI₂ + 2KNO₃",ovr:false,exp:"Обмен ионами."},
+{eq:"2Na + Cl₂ → 2NaCl",ovr:true,exp:"Na: 0→+1, Cl: 0→−1."},
+{eq:"N₂ + 3H₂ → 2NH₃",ovr:true,exp:"N: 0→−3, H: 0→+1."},
+{eq:"MgCO₃ → MgO + CO₂",ovr:false,exp:"Mg(+2), C(+4), O(−2) — без изменений."},
+{eq:"2KMnO₄ → K₂MnO₄ + MnO₂ + O₂",ovr:true,exp:"Mn: +7→+6/+4, O: −2→0."},
+{eq:"Fe + CuSO₄ → FeSO₄ + Cu",ovr:true,exp:"Fe: 0→+2, Cu: +2→0."},
+{eq:"H₂S + Br₂ → S + 2HBr",ovr:true,exp:"S: −2→0, Br: 0→−1."},
+{eq:"K₂O + H₂O → 2KOH",ovr:false,exp:"K(+1), O(−2), H(+1) — без изменений."},
+{eq:"2Mg + CO₂ → 2MgO + C",ovr:true,exp:"Mg: 0→+2, C: +4→0."},
+{eq:"Ba(OH)₂ + H₂SO₄ → BaSO₄ + 2H₂O",ovr:false,exp:"Нейтрализация — обмен."},
+{eq:"Cl₂ + 2KBr → 2KCl + Br₂",ovr:true,exp:"Cl: 0→−1, Br: −1→0."},
+{eq:"FeS + 2HCl → FeCl₂ + H₂S",ovr:false,exp:"Fe(+2), S(−2), H(+1), Cl(−1) — обмен."},
+{eq:"3Fe + 2O₂ → Fe₃O₄",ovr:true,exp:"Fe: 0→+2/+3, O: 0→−2."},
+{eq:"CaO + H₂O → Ca(OH)₂",ovr:false,exp:"Ca(+2), O(−2), H(+1) — без изменений."},
+{eq:"2H₂O₂ → 2H₂O + O₂",ovr:true,exp:"O: −1→−2 и −1→0 (диспропорц.)"},
+{eq:"Zn + 2HCl → ZnCl₂ + H₂",ovr:true,exp:"Zn: 0→+2, H: +1→0."},
+{eq:"Na₂CO₃ + 2HCl → 2NaCl + CO₂ + H₂O",ovr:false,exp:"Обмен, с.о. постоянны."},
+{eq:"2Al + Fe₂O₃ → Al₂O₃ + 2Fe",ovr:true,exp:"Al: 0→+3, Fe: +3→0. Термит!"},
+];
+
+const roleDB=[
+{eq:"H₂S + Br₂ → S + 2HBr",items:[
+{text:"S в H₂S (−2 → 0)",correct:"Восст.",wrong:"Окисл.",exp:"S отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"Br₂ (0 → −1)",correct:"Окисл.",wrong:"Восст.",exp:"Br принимает e⁻ → <strong>окислитель</strong>."},
+{text:"Процесс S: −2 → 0",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс Br: 0 → −1",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"2Na + 2H₂O → 2NaOH + H₂",items:[
+{text:"Na (0 → +1)",correct:"Восст.",wrong:"Окисл.",exp:"Na отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"H в H₂O (+1 → 0)",correct:"Окисл.",wrong:"Восст.",exp:"H принимает e⁻ → H₂O — <strong>окислитель</strong>."},
+{text:"Процесс Na: 0 → +1",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс H: +1 → 0",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"Zn + CuSO₄ → ZnSO₄ + Cu",items:[
+{text:"Zn (0 → +2)",correct:"Восст.",wrong:"Окисл.",exp:"Zn отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"Cu²⁺ (+2 → 0)",correct:"Окисл.",wrong:"Восст.",exp:"Cu принимает e⁻ → <strong>окислитель</strong>."},
+{text:"Процесс Zn: 0 → +2",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс Cu: +2 → 0",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"2Al + 3Cl₂ → 2AlCl₃",items:[
+{text:"Al (0 → +3)",correct:"Восст.",wrong:"Окисл.",exp:"Al отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"Cl₂ (0 → −1)",correct:"Окисл.",wrong:"Восст.",exp:"Cl принимает e⁻ → <strong>окислитель</strong>."},
+{text:"Процесс Al: 0 → +3",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс Cl: 0 → −1",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"Fe₂O₃ + 3CO → 2Fe + 3CO₂",items:[
+{text:"Fe³⁺ (+3 → 0)",correct:"Окисл.",wrong:"Восст.",exp:"Fe принимает e⁻ → Fe₂O₃ — <strong>окислитель</strong>."},
+{text:"C в CO (+2 → +4)",correct:"Восст.",wrong:"Окисл.",exp:"C отдаёт e⁻ → CO — <strong>восстановитель</strong>."},
+{text:"Процесс Fe: +3 → 0",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."},
+{text:"Процесс C: +2 → +4",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."}]},
+{eq:"Mg + 2HCl → MgCl₂ + H₂",items:[
+{text:"Mg (0 → +2)",correct:"Восст.",wrong:"Окисл.",exp:"Mg отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"H⁺ (+1 → 0)",correct:"Окисл.",wrong:"Восст.",exp:"H принимает e⁻ → HCl — <strong>окислитель</strong>."},
+{text:"Процесс Mg: 0 → +2",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс H: +1 → 0",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"2H₂ + O₂ → 2H₂O",items:[
+{text:"H₂ (0 → +1)",correct:"Восст.",wrong:"Окисл.",exp:"H отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"O₂ (0 → −2)",correct:"Окисл.",wrong:"Восст.",exp:"O принимает e⁻ → <strong>окислитель</strong>."},
+{text:"Процесс H: 0 → +1",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс O: 0 → −2",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"Ca + Br₂ → CaBr₂",items:[
+{text:"Ca (0 → +2)",correct:"Восст.",wrong:"Окисл.",exp:"Ca отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"Br₂ (0 → −1)",correct:"Окисл.",wrong:"Восст.",exp:"Br принимает e⁻ → <strong>окислитель</strong>."},
+{text:"Процесс Ca: 0 → +2",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс Br: 0 → −1",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"Cl₂ + 2KBr → 2KCl + Br₂",items:[
+{text:"Cl₂ (0 → −1)",correct:"Окисл.",wrong:"Восст.",exp:"Cl принимает e⁻ → <strong>окислитель</strong>."},
+{text:"Br⁻ (−1 → 0)",correct:"Восст.",wrong:"Окисл.",exp:"Br отдаёт e⁻ → KBr — <strong>восстановитель</strong>."},
+{text:"Процесс Cl: 0 → −1",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."},
+{text:"Процесс Br: −1 → 0",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."}]},
+{eq:"2Na + Cl₂ → 2NaCl",items:[
+{text:"Na (0 → +1)",correct:"Восст.",wrong:"Окисл.",exp:"Na отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"Cl₂ (0 → −1)",correct:"Окисл.",wrong:"Восст.",exp:"Cl принимает e⁻ → <strong>окислитель</strong>."},
+{text:"Процесс Na: 0 → +1",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс Cl: 0 → −1",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"2Al + Fe₂O₃ → Al₂O₃ + 2Fe",items:[
+{text:"Al (0 → +3)",correct:"Восст.",wrong:"Окисл.",exp:"Al отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"Fe³⁺ (+3 → 0)",correct:"Окисл.",wrong:"Восст.",exp:"Fe принимает e⁻ → Fe₂O₃ — <strong>окислитель</strong>."},
+{text:"Процесс Al: 0 → +3",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс Fe: +3 → 0",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+{eq:"2Mg + CO₂ → 2MgO + C",items:[
+{text:"Mg (0 → +2)",correct:"Восст.",wrong:"Окисл.",exp:"Mg отдаёт e⁻ → <strong>восстановитель</strong>."},
+{text:"C⁴⁺ (+4 → 0)",correct:"Окисл.",wrong:"Восст.",exp:"C принимает e⁻ → CO₂ — <strong>окислитель</strong>."},
+{text:"Процесс Mg: 0 → +2",correct:"Окисл-е",wrong:"Восст-е",exp:"С.о. повысилась → <strong>окисление</strong>."},
+{text:"Процесс C: +4 → 0",correct:"Восст-е",wrong:"Окисл-е",exp:"С.о. понизилась → <strong>восстановление</strong>."}]},
+];
+
+const activityOrder=["Li","K","Ca","Na","Mg","Al","Zn","Fe","Ni","Sn","Pb","H","Cu","Hg","Ag","Pt","Au"];
+const saltPairs=[
+["Mg","CuSO₄"],["Mg","FeCl₂"],["Mg","Pb(NO₃)₂"],["Mg","ZnCl₂"],["Mg","AgNO₃"],["Mg","NiSO₄"],
+["Al","CuSO₄"],["Al","FeCl₂"],["Al","Pb(NO₃)₂"],["Al","AgNO₃"],["Al","NiCl₂"],
+["Zn","CuSO₄"],["Zn","FeSO₄"],["Zn","Pb(NO₃)₂"],["Zn","AgNO₃"],["Zn","NiCl₂"],["Zn","SnCl₂"],
+["Fe","CuSO₄"],["Fe","Pb(NO₃)₂"],["Fe","AgNO₃"],["Fe","SnCl₂"],["Fe","NiSO₄"],
+["Ni","CuSO₄"],["Ni","Pb(NO₃)₂"],["Ni","AgNO₃"],
+["Sn","CuSO₄"],["Sn","Pb(NO₃)₂"],["Sn","AgNO₃"],
+["Pb","CuSO₄"],["Pb","AgNO₃"],
+["Cu","AgNO₃"],["Cu","FeCl₂"],["Cu","ZnSO₄"],["Cu","AlCl₃"],["Cu","MgCl₂"],
+["Ag","CuSO₄"],["Ag","FeCl₂"],["Ag","AlCl₃"],["Ag","ZnSO₄"],["Ag","Pb(NO₃)₂"],
+["Pb","ZnSO₄"],["Pb","FeCl₂"],["Pb","AlCl₃"],["Pb","MgCl₂"],
+["Sn","ZnSO₄"],["Sn","FeCl₂"],["Sn","AlCl₃"],
+["Ni","ZnSO₄"],["Ni","FeCl₂"],["Ni","AlCl₃"],
+["Fe","ZnSO₄"],["Fe","AlCl₃"],["Fe","MgCl₂"],
+["Zn","AlCl₃"],["Zn","MgCl₂"],
+];
+
+const acidMetals=["Mg","Al","Zn","Fe","Ni","Sn","Pb","Cu","Ag","Au","Pt"];
+const acids=["HCl(разб.)","H₂SO₄(разб.)"];
+
+function getAI(m){return activityOrder.indexOf(m)}
+function getSaltMetal(salt){
+  const m=salt.match(/^([A-Z][a-z]?)/);
+  if(!m)return null;
+  const possibles={"Cu":"Cu","Ag":"Ag","Fe":"Fe","Zn":"Zn","Pb":"Pb","Ni":"Ni","Sn":"Sn","Al":"Al","Mg":"Mg"};
+  return possibles[m[1]]||null;
+}
+
+function genActQ(){
+  if(Math.random()<0.45){
+    const pair=saltPairs[Math.floor(Math.random()*saltPairs.length)];
+    const free=pair[0], salt=pair[1], saltM=getSaltMetal(salt);
+    const goes=getAI(free)<getAI(saltM);
+    const eq=`${free} + ${salt} →`;
+    const exp=goes?`${free} левее ${saltM} → <strong>реакция идёт</strong>.`:`${free} правее ${saltM} → <strong>реакция не идёт</strong>.`;
+    return{eq,answer:goes,exp};
+  } else {
+    const metal=acidMetals[Math.floor(Math.random()*acidMetals.length)];
+    const acid=acids[Math.floor(Math.random()*acids.length)];
+    const goes=getAI(metal)<getAI("H");
+    const eq=`${metal} + ${acid} →`;
+    const exp=goes?`${metal} стоит <strong>до H</strong> → реагирует с разб. кислотой.`:`${metal} стоит <strong>после H</strong> → не реагирует.`;
+    return{eq,answer:goes,exp};
+  }
+}
+
+const electroDB=[
+{text:"При электролизе р-ра AgNO₃ на катоде выделяется Ag",ans:true,exp:"Ag после H → на катоде <strong>металл</strong>."},
+{text:"При электролизе р-ра NaCl на катоде выделяется Na",ans:false,exp:"Na до Al → на катоде <strong>H₂</strong>."},
+{text:"При электролизе р-ра CuSO₄ на катоде выделяется Cu",ans:true,exp:"Cu после H → <strong>Cu</strong>."},
+{text:"При электролизе р-ра KBr на катоде выделяется K",ans:false,exp:"K до Al → <strong>H₂</strong>."},
+{text:"При электролизе р-ра MgSO₄ на катоде выделяется H₂",ans:true,exp:"Mg до Al → <strong>H₂</strong>."},
+{text:"При электролизе р-ра ZnCl₂ на катоде может выделяться Zn",ans:true,exp:"Zn между Al и H → <strong>и Zn, и H₂</strong>."},
+{text:"При электролизе р-ра FeSO₄ на катоде может выделяться Fe",ans:true,exp:"Fe между Al и H → <strong>и Fe, и H₂</strong>."},
+{text:"При электролизе р-ра Ca(NO₃)₂ на катоде выделяется Ca",ans:false,exp:"Ca до Al → <strong>H₂</strong>."},
+{text:"При рафинировании меди анод — нечистая медь",ans:true,exp:"Нечистая медь растворяется на аноде."},
+{text:"При рафинировании меди электролит — NaCl",ans:false,exp:"Электролит — <strong>CuSO₄</strong>."},
+{text:"На аноде всегда протекает окисление",ans:true,exp:"<strong>Анод = окисление</strong> (всегда)."},
+{text:"На катоде протекает окисление",ans:false,exp:"На катоде — <strong>восстановление</strong>."},
+{text:"Гальванический элемент сам производит ток",ans:true,exp:"ОВР → ток."},
+{text:"Электролиз — ОВР под действием внешнего тока",ans:true,exp:"Электрическая энергия → химическая."},
+{text:"В гальв. элементе ток от внешнего источника",ans:false,exp:"Нет! Ток от <strong>самой ОВР</strong>. Внешний источник — электролиз."},
+{text:"При электролизе р-ра Al₂(SO₄)₃ на катоде выделяется Al",ans:false,exp:"Al вкл. до Al → <strong>H₂</strong>."},
+{text:"При электролизе р-ра NiSO₄ на катоде может выделяться Ni",ans:true,exp:"Ni между Al и H → <strong>и Ni, и H₂</strong>."},
+{text:"При электролизе расплава NaCl на катоде выделяется Na",ans:true,exp:"В <strong>расплаве</strong> воды нет → сам металл."},
+{text:"При рафинировании меди чистая медь — катод",ans:true,exp:"Чистая медь осаждается на <strong>катоде</strong>."},
+{text:"При электролизе р-ра CuCl₂ на катоде выделяется H₂",ans:false,exp:"Cu после H → на катоде <strong>Cu</strong>, не H₂."},
+{text:"При электролизе р-ра LiOH на катоде выделяется Li",ans:false,exp:"Li до Al → на катоде <strong>H₂</strong>."},
+{text:"При электролизе р-ра SnCl₂ на катоде может выделяться Sn",ans:true,exp:"Sn между Al и H → <strong>и Sn, и H₂</strong>."},
+];
+
+// ===== HELPERS =====
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function pick(a,n){return shuffle(a).slice(0,n)}
+const rounds={ox:0,cl:0,rl:0,ac:0,el:0};
+
+function updateBar(s,c,t){
+  const p=t>0?(c/t*100):0;
+  const f=document.getElementById(s+'-score-fill');
+  const n=document.getElementById(s+'-score');
+  if(f)f.style.width=p+'%';
+  if(n)n.textContent=c+'/'+t;
+}
+
+// ===== GENERATORS =====
+function generateOx(){
+  rounds.ox++;document.getElementById('ox-round').textContent=rounds.ox;
+  const items=pick(oxDB,8),c=document.getElementById('ox-container');c.innerHTML='';
+  const e=document.createElement('div');e.className='exercise';e.id='ox-live';
+  e.innerHTML=`<div class="exercise-header"><span class="exercise-type type-oxidation">Степени окисления</span><span class="round-badge">Раунд ${rounds.ox}</span></div><h3>Определи степени окисления каждого элемента:</h3>`;
+  items.forEach(it=>{
+    let inp=it.elements.map(el=>`<label>${el.el}:</label><input class="ox-input" data-answer="${el.ans}" maxlength="3">`).join(' ');
+    e.innerHTML+=`<div class="ox-compound"><span class="compound-name">${it.name}</span><div class="ox-input-group">${inp}</div></div>`;
+  });
+  c.appendChild(e);document.getElementById('ox-fb').className='feedback';updateBar('ox',0,0);
+}
+
+function checkAllOx(){
+  const inputs=document.querySelectorAll('#ox-live .ox-input');let co=0,to=inputs.length;
+  inputs.forEach(i=>{
+    const v=i.value.trim().replace('−','-'),a=i.dataset.answer;
+    if(i.classList.contains('correct')){co++;return}
+    if(i.classList.contains('wrong'))i.classList.remove('wrong');
+    if(v===a||v===a.replace('+','')){i.classList.add('correct');co++}
+    else if(v!=='')i.classList.add('wrong');
+  });
+  const fb=document.getElementById('ox-fb');
+  if(co===to){fb.className='feedback show correct-fb';fb.textContent=`Отлично! ${co}/${to} ✨`;celebrate()}
+  else{fb.className='feedback show wrong-fb';fb.textContent=`${co}/${to}. Красные — ошибки!`}
+  updateBar('ox',co,to);
+}
+
+let clS={c:0,t:0,n:0};
+function generateClassify(){
+  rounds.cl++;document.getElementById('cl-round').textContent=rounds.cl;
+  const items=pick(classifyDB,7),c=document.getElementById('cl-container');c.innerHTML='';
+  const e=document.createElement('div');e.className='exercise';
+  e.innerHTML=`<div class="exercise-header"><span class="exercise-type type-balance">ОВР или нет?</span><span class="round-badge">Раунд ${rounds.cl}</span></div><h3>Является ли реакция окислительно-восстановительной?</h3>`;
+  clS={c:0,t:0,n:items.length};
+  items.forEach(it=>{
+    e.innerHTML+=`<div class="reaction-item" data-answer="${it.ovr?'ovr':'not'}"><div class="reaction-formula">${it.eq}</div><div class="reaction-options"><button class="reaction-opt" onclick="clClick(this,'ovr')">ОВР ⚡</button><button class="reaction-opt" onclick="clClick(this,'not')">Не ОВР</button></div><div class="explanation">${it.exp}</div></div>`;
+  });
+  c.appendChild(e);updateBar('cl',0,0);
+}
+function clClick(btn,ans){
+  const it=btn.closest('.reaction-item');if(it.classList.contains('answered'))return;it.classList.add('answered');
+  const cor=it.dataset.answer;clS.t++;
+  if(ans===cor){btn.classList.add('correct');clS.c++}
+  else{btn.classList.add('wrong');it.querySelectorAll('.reaction-opt').forEach(b=>{if(b!==btn)b.classList.add('correct')})}
+  it.querySelector('.explanation').classList.add('show');updateBar('cl',clS.c,clS.t);
+  if(clS.t===clS.n&&clS.c===clS.n)celebrate();
+}
+
+let rlS={c:0,t:0,n:0};
+function generateRoles(){
+  rounds.rl++;document.getElementById('rl-round').textContent=rounds.rl;
+  const item=pick(roleDB,1)[0],c=document.getElementById('rl-container');c.innerHTML='';
+  const e=document.createElement('div');e.className='exercise';
+  e.innerHTML=`<div class="exercise-header"><span class="exercise-type type-match">Роли в ОВР</span><span class="round-badge">Раунд ${rounds.rl}</span></div><h3>Реакция: <span style="color:var(--accent2);font-family:'JetBrains Mono',monospace">${item.eq}</span></h3>`;
+  rlS={c:0,t:0,n:item.items.length};
+  item.items.forEach((q,i)=>{
+    const id=`rl-e-${rounds.rl}-${i}`;
+    e.innerHTML+=`<div class="yesno-statement"><span class="text">${q.text} — это...</span><div class="yesno-btns"><button class="yn-btn" onclick="rlClick(this,true,'${id}')">${q.correct}</button><button class="yn-btn" onclick="rlClick(this,false,'${id}')">${q.wrong}</button></div></div><div class="explanation" id="${id}">${q.exp}</div>`;
+  });
+  c.appendChild(e);updateBar('rl',0,0);
+}
+function rlClick(btn,ok,eid){
+  const st=btn.closest('.yesno-statement');if(st.classList.contains('answered'))return;st.classList.add('answered');rlS.t++;
+  if(ok){btn.classList.add('selected-correct');rlS.c++}
+  else{btn.classList.add('selected-wrong');st.querySelectorAll('.yn-btn').forEach(b=>{if(b!==btn)b.classList.add('selected-correct')})}
+  document.getElementById(eid).classList.add('show');updateBar('rl',rlS.c,rlS.t);
+  if(rlS.t===rlS.n&&rlS.c===rlS.n)celebrate();
+}
+
+let acS={c:0,t:0,n:0};
+function generateActivity(){
+  rounds.ac++;document.getElementById('ac-round').textContent=rounds.ac;
+  const c=document.getElementById('ac-container');c.innerHTML='';
+  const e=document.createElement('div');e.className='exercise';
+  e.innerHTML=`<div class="exercise-header"><span class="exercise-type type-yesno">Да / Нет</span><span class="round-badge">Раунд ${rounds.ac}</span></div><h3>Протекает ли реакция?</h3>`;
+  const qs=[];for(let i=0;i<7;i++)qs.push(genActQ());
+  acS={c:0,t:0,n:qs.length};
+  qs.forEach((q,i)=>{
+    const id=`ac-e-${rounds.ac}-${i}`;
+    e.innerHTML+=`<div class="yesno-statement"><span class="text"><code style="color:var(--accent2)">${q.eq}</code></span><div class="yesno-btns"><button class="yn-btn" onclick="ynClick(this,${q.answer},'${id}','ac')">Да</button><button class="yn-btn" onclick="ynClick(this,${!q.answer},'${id}','ac')">Нет</button></div></div><div class="explanation" id="${id}">${q.exp}</div>`;
+  });
+  c.appendChild(e);updateBar('ac',0,0);
+}
+
+let elS={c:0,t:0,n:0};
+function generateElectro(){
+  rounds.el++;document.getElementById('el-round').textContent=rounds.el;
+  const items=pick(electroDB,7),c=document.getElementById('el-container');c.innerHTML='';
+  const e=document.createElement('div');e.className='exercise';
+  e.innerHTML=`<div class="exercise-header"><span class="exercise-type type-yesno">Верно / Неверно</span><span class="round-badge">Раунд ${rounds.el}</span></div><h3>Верны ли утверждения?</h3>`;
+  elS={c:0,t:0,n:items.length};
+  items.forEach((q,i)=>{
+    const id=`el-e-${rounds.el}-${i}`;
+    e.innerHTML+=`<div class="yesno-statement"><span class="text">${q.text}</span><div class="yesno-btns"><button class="yn-btn" onclick="ynClick(this,${q.ans},'${id}','el')">Да</button><button class="yn-btn" onclick="ynClick(this,${!q.ans},'${id}','el')">Нет</button></div></div><div class="explanation" id="${id}">${q.exp}</div>`;
+  });
+  c.appendChild(e);updateBar('el',0,0);
+}
+
+function ynClick(btn,ok,eid,sec){
+  const st=btn.closest('.yesno-statement');if(st.classList.contains('answered'))return;st.classList.add('answered');
+  const s=sec==='ac'?acS:elS;s.t++;
+  if(ok){btn.classList.add('selected-correct');s.c++}
+  else{btn.classList.add('selected-wrong');st.querySelectorAll('.yn-btn').forEach(b=>{if(b!==btn)b.classList.add('selected-correct')})}
+  document.getElementById(eid).classList.add('show');updateBar(sec,s.c,s.t);
+  if(s.t===s.n&&s.c===s.n)celebrate();
+}
+
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function celebrate(){
+  const c=document.getElementById('confetti'),cols=['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#ff8e53','#a855f7'];
+  for(let i=0;i<60;i++){const d=document.createElement('div'),sz=4+Math.random()*10;d.style.cssText=`position:absolute;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};left:${Math.random()*100}%;top:-10px;animation:cFall ${1.5+Math.random()*2}s ease-out forwards;animation-delay:${Math.random()*.6}s;opacity:.9`;c.appendChild(d)}
+  setTimeout(()=>{c.innerHTML=''},4500);
+  if(!document.getElementById('c-style')){const s=document.createElement('style');s.id='c-style';s.textContent='@keyframes cFall{0%{transform:translateY(0) rotate(0);opacity:.9}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}';document.head.appendChild(s)}
+}
+
+// Init
+generateOx();generateClassify();generateRoles();generateActivity();generateElectro();
+</script>
+</body>
+</html>
