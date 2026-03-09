@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ОВР — Финален тест</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0e17;--surface:#1a1930;--surface2:#232145;--accent:#a855f7;--accent2:#ffd93d;--accent3:#6bcb77;--accent4:#4d96ff;--red:#ff6b6b;--text:#fffffe;--text-dim:#a7a9be}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 40%,rgba(168,85,247,.07) 0%,transparent 50%),radial-gradient(ellipse at 70% 70%,rgba(99,102,241,.06) 0%,transparent 50%);z-index:0;pointer-events:none}
+.container{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:20px}
+
+/* Start screen */
+.start-screen{text-align:center;padding:60px 20px}
+.start-screen h1{font-size:2.5em;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent4),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px}
+.start-screen .sub{color:var(--text-dim);font-size:1.05em;margin-bottom:30px;line-height:1.6}
+.start-icon{font-size:3.5em;margin-bottom:16px}
+.start-features{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:24px 0 32px}
+.feature-chip{padding:10px 18px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:.88em;color:var(--text-dim);font-weight:600}
+.feature-chip span{margin-right:6px}
+.start-btn{display:inline-block;padding:16px 48px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--accent),#6366f1);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:1.15em;cursor:pointer;box-shadow:0 6px 30px rgba(168,85,247,.35);transition:all .3s;text-decoration:none}
+.start-btn:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(168,85,247,.5)}
+.back-link{display:inline-block;margin-top:20px;color:var(--text-dim);text-decoration:none;font-weight:600;font-size:.9em;transition:color .3s}
+.back-link:hover{color:var(--text)}
+
+/* Progress bar */
+.test-header{position:sticky;top:0;z-index:10;background:var(--bg);padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.progress-row{display:flex;align-items:center;gap:12px}
+.progress-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent4));transition:width .4s ease}
+.progress-text{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9em;color:var(--accent2);min-width:55px;text-align:right}
+.timer{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9em;color:var(--text-dim);min-width:55px}
+
+/* Question card */
+.question-card{background:var(--surface);border-radius:22px;padding:30px;margin:20px 0;border:1px solid rgba(255,255,255,.06);animation:slideIn .35s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.q-badge{display:inline-block;font-size:.72em;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.q-badge.cat-ox{background:rgba(255,107,107,.15);color:var(--red)}
+.q-badge.cat-classify{background:rgba(77,150,255,.15);color:var(--accent4)}
+.q-badge.cat-role{background:rgba(107,203,119,.15);color:var(--accent3)}
+.q-badge.cat-activity{background:rgba(255,217,61,.15);color:var(--accent2)}
+.q-badge.cat-electro{background:rgba(168,85,247,.15);color:var(--accent)}
+.q-badge.cat-concept{background:rgba(255,255,255,.08);color:var(--text-dim)}
+.q-number{font-size:.85em;color:var(--text-dim);font-weight:700;margin-bottom:8px}
+.q-text{font-size:1.1em;font-weight:700;line-height:1.6;margin-bottom:20px}
+.q-formula{font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:1.05em;padding:14px;background:rgba(0,0,0,.25);border-radius:12px;margin:12px 0 18px;text-align:center;line-height:1.6}
+
+/* Answer options */
+.options{display:flex;flex-direction:column;gap:10px}
+.option{padding:14px 18px;border-radius:14px;border:2px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:12px;font-weight:600;line-height:1.4}
+.option:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.04);transform:translateX(4px)}
+.option .letter{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85em;flex-shrink:0;transition:all .25s}
+.option:hover .letter{background:rgba(168,85,247,.15);color:var(--accent)}
+.option.selected{border-color:var(--accent);background:rgba(168,85,247,.08)}
+.option.selected .letter{background:var(--accent);color:#fff}
+.option.correct-ans{border-color:var(--accent3)!important;background:rgba(107,203,119,.1)!important}
+.option.correct-ans .letter{background:var(--accent3)!important;color:#fff!important}
+.option.wrong-ans{border-color:var(--red)!important;background:rgba(255,107,107,.08)!important}
+.option.wrong-ans .letter{background:var(--red)!important;color:#fff!important}
+.option.disabled{pointer-events:none;opacity:.7}
+.option.disabled.correct-ans{opacity:1}
+
+/* Input style questions */
+.input-row{display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}
+.input-row label{font-weight:600;color:var(--text-dim);min-width:40px}
+.q-input{width:60px;height:40px;border-radius:10px;border:2px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);color:var(--text);text-align:center;font-family:'JetBrains Mono',monospace;font-size:1em;font-weight:600;outline:none;transition:all .3s}
+.q-input:focus{border-color:var(--accent);box-shadow:0 0 12px rgba(168,85,247,.2)}
+.q-input.correct{border-color:var(--accent3);background:rgba(107,203,119,.1)}
+.q-input.wrong{border-color:var(--red);background:rgba(255,107,107,.1)}
+.compound-label{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent2);font-size:1.1em;min-width:80px}
+
+/* Explanation */
+.explanation{padding:14px 18px;border-radius:12px;margin-top:14px;font-size:.92em;line-height:1.6;display:none;animation:fadeIn .3s}
+.explanation.show{display:block}
+.explanation.right{background:rgba(107,203,119,.08);border:1px solid rgba(107,203,119,.15);color:var(--accent3)}
+.explanation.wrong{background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.15);color:var(--red)}
+.explanation strong{color:var(--accent4)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* Nav buttons */
+.q-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:10px}
+.q-nav-btn{padding:12px 28px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95em;cursor:pointer;transition:all .3s}
+.btn-next{background:linear-gradient(135deg,var(--accent),#6366f1);color:#fff;box-shadow:0 4px 18px rgba(168,85,247,.25)}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(168,85,247,.35)}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-check{background:linear-gradient(135deg,var(--accent4),#3b82f6);color:#fff;box-shadow:0 4px 18px rgba(77,150,255,.25)}
+.btn-check:hover{transform:translateY(-2px)}
+.btn-check:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* Results screen */
+.results{text-align:center;padding:40px 20px;animation:fadeIn .5s}
+.results-icon{font-size:4em;margin-bottom:16px}
+.results h2{font-size:2em;font-weight:900;margin-bottom:8px}
+.results .score-big{font-size:3.5em;font-weight:900;margin:16px 0}
+.results .score-big.great{background:linear-gradient(135deg,var(--accent3),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.results .score-big.ok{background:linear-gradient(135deg,var(--accent2),#ff8e53);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.results .score-big.low{background:linear-gradient(135deg,var(--red),#ff8e53);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.results .msg{color:var(--text-dim);font-size:1.05em;margin-bottom:24px;line-height:1.6}
+.results-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:20px 0 28px}
+.stat-box{padding:16px 24px;border-radius:14px;background:var(--surface);border:1px solid rgba(255,255,255,.06);min-width:110px}
+.stat-box .num{font-size:1.6em;font-weight:900;color:var(--accent2)}
+.stat-box .lbl{font-size:.8em;color:var(--text-dim);font-weight:600;margin-top:4px}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Review section */
+.review{margin-top:30px;text-align:left}
+.review h3{font-size:1.2em;font-weight:800;margin-bottom:16px;text-align:center;color:var(--text-dim)}
+.review-item{padding:18px;border-radius:14px;margin-bottom:12px;background:var(--surface);border:1px solid rgba(255,255,255,.05)}
+.review-item.rev-correct{border-left:4px solid var(--accent3)}
+.review-item.rev-wrong{border-left:4px solid var(--red)}
+.rev-q{font-weight:700;margin-bottom:8px;line-height:1.5}
+.rev-answer{font-size:.9em;color:var(--text-dim);line-height:1.5}
+.rev-answer .got{color:var(--red);font-weight:700}
+.rev-answer .expected{color:var(--accent3);font-weight:700}
+
+/* Category breakdown */
+.cat-breakdown{margin:24px 0;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.cat-stat{padding:10px 16px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.05);font-size:.85em;font-weight:600}
+.cat-stat .cat-name{color:var(--text-dim);margin-right:6px}
+
+.hidden{display:none!important}
+
+@media(max-width:600px){
+  .start-screen h1{font-size:1.9em}
+  .question-card{padding:22px}
+  .q-text{font-size:1em}
+  .results .score-big{font-size:2.8em}
+}
+
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;overflow:hidden}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- START SCREEN -->
+  <div id="startScreen" class="start-screen">
+    <div class="start-icon">🎯</div>
+    <h1>Финален тест по ОВР</h1>
+    <p class="sub">Провери знанията си! Всеки път тестът е различен — въпросите се избират на случаен принцип от голяма база.</p>
+    <div class="start-features">
+      <div class="feature-chip"><span>📝</span> 20 въпроса</div>
+      <div class="feature-chip"><span>🎲</span> Случайни всеки път</div>
+      <div class="feature-chip"><span>📊</span> Подробни резултати</div>
+      <div class="feature-chip"><span>💡</span> Обяснения</div>
+    </div>
+    <button class="start-btn" onclick="startTest()">Започни теста</button>
+    <br>
+    <a href="index.html" class="back-link">← Назад към подготовката</a>
+  </div>
+
+  <!-- TEST -->
+  <div id="testArea" class="hidden">
+    <div class="test-header">
+      <div class="progress-row">
+        <span class="timer" id="timer">00:00</span>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="progress-text" id="progressText">0/20</span>
+      </div>
+    </div>
+    <div id="questionContainer"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsArea" class="hidden"></div>
+</div>
+
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+// ============================================================
+// QUESTION DATABASE (Bulgarian)
+// ============================================================
+
+const DB = {
+// --- OXIDATION STATES (type: "ox_choice") ---
+ox_choice: [
+{q:"Каква е степента на окисление на S в H₂SO₄?",opts:["+4","+6","-2","+2"],correct:1,exp:"H(+1)×2 + S + O(−2)×4 = 0 → S = <strong>+6</strong>."},
+{q:"Каква е степента на окисление на N в HNO₃?",opts:["+3","+4","+5","-3"],correct:2,exp:"H(+1) + N + O(−2)×3 = 0 → N = <strong>+5</strong>."},
+{q:"Каква е степента на окисление на Mn в KMnO₄?",opts:["+4","+6","+7","+2"],correct:2,exp:"K(+1) + Mn + O(−2)×4 = 0 → Mn = <strong>+7</strong>."},
+{q:"Каква е степента на окисление на C в CO?",opts:["+4","+2","-2","0"],correct:1,exp:"C + O(−2) = 0 → C = <strong>+2</strong>."},
+{q:"Каква е степента на окисление на Cr в K₂Cr₂O₇?",opts:["+3","+4","+6","+7"],correct:2,exp:"K(+1)×2 + Cr×2 + O(−2)×7 = 0 → Cr = <strong>+6</strong>."},
+{q:"Каква е степента на окисление на S в SO₂?",opts:["+4","+6","-2","+2"],correct:0,exp:"S + O(−2)×2 = 0 → S = <strong>+4</strong>."},
+{q:"Каква е степента на окисление на P в H₃PO₄?",opts:["+3","+5","-3","+4"],correct:1,exp:"H(+1)×3 + P + O(−2)×4 = 0 → P = <strong>+5</strong>."},
+{q:"Каква е степента на окисление на H в CaH₂?",opts:["+1","-1","0","+2"],correct:1,exp:"Ca(+2) + H×2 = 0 → H = <strong>−1</strong> (хидрид на активен метал)."},
+{q:"Каква е степента на окисление на H в H₂O?",opts:["+1","-1","0","+2"],correct:0,exp:"H×2 + O(−2) = 0 → H = <strong>+1</strong>."},
+{q:"Каква е степента на окисление на N в N₂O?",opts:["+1","+2","-1","+3"],correct:0,exp:"N×2 + O(−2) = 0 → N = <strong>+1</strong>."},
+{q:"Каква е степента на окисление на N в NH₃?",opts:["+3","-3","-1","+1"],correct:1,exp:"N + H(+1)×3 = 0 → N = <strong>−3</strong>."},
+{q:"Каква е степента на окисление на Fe в Fe₂O₃?",opts:["+2","+3","+6","0"],correct:1,exp:"Fe×2 + O(−2)×3 = 0 → Fe = <strong>+3</strong>."},
+{q:"Каква е степента на окисление на Cu в Cu₂O?",opts:["+2","+1","0","-1"],correct:1,exp:"Cu×2 + O(−2) = 0 → Cu = <strong>+1</strong>."},
+{q:"Каква е степента на окисление на Cl в Cl₂O₇?",opts:["+5","+3","+7","+1"],correct:2,exp:"Cl×2 + O(−2)×7 = 0 → Cl = <strong>+7</strong>."},
+{q:"Каква е степента на окисление на Mn в MnO₂?",opts:["+2","+4","+7","+6"],correct:1,exp:"Mn + O(−2)×2 = 0 → Mn = <strong>+4</strong>."},
+{q:"Каква е степента на окисление на S в Na₂SO₃?",opts:["+4","+6","-2","+2"],correct:0,exp:"Na(+1)×2 + S + O(−2)×3 = 0 → S = <strong>+4</strong>."},
+{q:"Каква е степента на окисление на C в CO₂?",opts:["+2","+4","-4","0"],correct:1,exp:"C + O(−2)×2 = 0 → C = <strong>+4</strong>."},
+{q:"Каква е степента на окисление на Pb в PbO₂?",opts:["+2","+4","+6","0"],correct:1,exp:"Pb + O(−2)×2 = 0 → Pb = <strong>+4</strong>."},
+{q:"Каква е степента на окисление на S в H₂S?",opts:["+2","-2","+4","0"],correct:1,exp:"H(+1)×2 + S = 0 → S = <strong>−2</strong>."},
+{q:"Каква е степента на окисление на N в NO₂?",opts:["+2","+4","+5","+3"],correct:1,exp:"N + O(−2)×2 = 0 → N = <strong>+4</strong>."},
+{q:"В коя група всяко вещество съдържа елемент със с.о. +1?",opts:["CaO, H₂O","N₂O, H₂S","Na₂O, Cl₂","CaH₂, MgCl₂"],correct:1,exp:"N₂O: N=+1. H₂S: H=+1. И в двете има елемент със с.о. <strong>+1</strong>."},
+{q:"Каква е степента на окисление на Cl в HClO₃?",opts:["+1","+3","+5","+7"],correct:2,exp:"H(+1) + Cl + O(−2)×3 = 0 → Cl = <strong>+5</strong>."},
+],
+
+// --- CLASSIFY REACTIONS (type: "classify") ---
+classify: [
+{q:"Окислително-редукционен ли е процесът?",formula:"2Na + 2H₂O → 2NaOH + H₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Na: 0→+1, H: +1→0. С.о. се променят → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"NaCl + AgNO₃ → NaNO₃ + AgCl",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Реакция на обмен. Степените на окисление <strong>не се променят</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"CaCO₃ → CaO + CO₂",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Ca(+2), C(+4), O(−2) — <strong>без промяна</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2Al + 6HCl → 2AlCl₃ + 3H₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Al: 0→+3, H: +1→0 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"CaCO₃ + 2HCl → CaCl₂ + CO₂ + H₂O",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Всички с.о. се запазват → <strong>не е ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"Ca + Br₂ → CaBr₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Ca: 0→+2, Br: 0→−1 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2SO₂ + O₂ → 2SO₃",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"S: +4→+6, O₂: 0→−2 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2Al(OH)₃ → Al₂O₃ + 3H₂O",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Al(+3), O(−2), H(+1) — <strong>без промяна</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"Fe₂O₃ + 3CO → 2Fe + 3CO₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Fe: +3→0, C: +2→+4 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"NaOH + HCl → NaCl + H₂O",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Неутрализация — реакция на обмен, <strong>не е ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2H₂ + O₂ → 2H₂O",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"H: 0→+1, O: 0→−2 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"Cl₂ + 2KBr → 2KCl + Br₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Cl: 0→−1, Br: −1→0 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Обмен на йони. <strong>Не е ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2KClO₃ → 2KCl + 3O₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Cl: +5→−1, O: −2→0 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"CuO + H₂SO₄ → CuSO₄ + H₂O",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Cu(+2), S(+6), O(−2), H(+1) — <strong>без промяна</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"4Fe + 3O₂ → 2Fe₂O₃",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Fe: 0→+3, O: 0→−2 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2Mg + CO₂ → 2MgO + C",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Mg: 0→+2, C: +4→0 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"K₂O + H₂O → 2KOH",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"K(+1), O(−2), H(+1) — <strong>без промяна</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"N₂ + 3H₂ → 2NH₃",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"N: 0→−3, H: 0→+1 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2Al + Fe₂O₃ → Al₂O₃ + 2Fe",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Al: 0→+3, Fe: +3→0 → <strong>ОВР</strong> (термитна реакция)."},
+{q:"Окислително-редукционен ли е процесът?",formula:"Na₂CO₃ + 2HCl → 2NaCl + CO₂ + H₂O",correct:1,opts:["Да, ОВР","Не, не е ОВР"],exp:"Обмен. Всички с.о. се запазват → <strong>не е ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"Zn + 2HCl → ZnCl₂ + H₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"Zn: 0→+2, H: +1→0 → <strong>ОВР</strong>."},
+{q:"Окислително-редукционен ли е процесът?",formula:"2H₂O₂ → 2H₂O + O₂",correct:0,opts:["Да, ОВР","Не, не е ОВР"],exp:"O: −1→−2 и −1→0 (диспропорциониране) → <strong>ОВР</strong>."},
+],
+
+// --- ROLES (type: "role") ---
+role: [
+{q:"В реакцията H₂S + Br₂ → S + 2HBr, кое вещество е окислител?",opts:["H₂S","Br₂","S","HBr"],correct:1,exp:"Br₂ приема електрони (0→−1) → <strong>окислител</strong>."},
+{q:"В реакцията H₂S + Br₂ → S + 2HBr, кое вещество е редуктор?",opts:["H₂S","Br₂","S","HBr"],correct:0,exp:"S в H₂S отдава електрони (−2→0) → H₂S е <strong>редуктор</strong>."},
+{q:"В реакцията 2Na + 2H₂O → 2NaOH + H₂, Na е:",opts:["Окислител","Редуктор","Нито едно"],correct:1,exp:"Na отдава e⁻ (0→+1) → <strong>редуктор</strong>."},
+{q:"В реакцията 2Na + 2H₂O → 2NaOH + H₂, водата е:",opts:["Окислител","Редуктор","Нито едно"],correct:0,exp:"H в H₂O приема e⁻ (+1→0) → H₂O е <strong>окислител</strong>."},
+{q:"В реакцията Zn + CuSO₄ → ZnSO₄ + Cu, Zn е:",opts:["Окислител","Редуктор","Нито едно"],correct:1,exp:"Zn отдава e⁻ (0→+2) → <strong>редуктор</strong>."},
+{q:"В реакцията Zn + CuSO₄ → ZnSO₄ + Cu, Cu²⁺ е:",opts:["Окислител","Редуктор","Нито едно"],correct:0,exp:"Cu²⁺ приема e⁻ (+2→0) → <strong>окислител</strong>."},
+{q:"В реакцията Fe₂O₃ + 3CO → 2Fe + 3CO₂, CO е:",opts:["Окислител","Редуктор","Нито едно"],correct:1,exp:"C в CO отдава e⁻ (+2→+4) → CO е <strong>редуктор</strong>."},
+{q:"В реакцията Fe₂O₃ + 3CO → 2Fe + 3CO₂, Fe₂O₃ е:",opts:["Окислител","Редуктор","Нито едно"],correct:0,exp:"Fe приема e⁻ (+3→0) → Fe₂O₃ е <strong>окислител</strong>."},
+{q:"Процесът S: −2 → 0 представлява:",opts:["Окисление","Редукция"],correct:0,exp:"С.о. се повишава → отдаване на e⁻ → <strong>окисление</strong>."},
+{q:"Процесът Br: 0 → −1 представлява:",opts:["Окисление","Редукция"],correct:1,exp:"С.о. се понижава → приемане на e⁻ → <strong>редукция</strong>."},
+{q:"Процесът Fe: +3 → 0 представлява:",opts:["Окисление","Редукция"],correct:1,exp:"С.о. се понижава → <strong>редукция</strong>."},
+{q:"Процесът Al: 0 → +3 представлява:",opts:["Окисление","Редукция"],correct:0,exp:"С.о. се повишава → <strong>окисление</strong>."},
+{q:"Процесът Mg: 0 → +2 представлява:",opts:["Окисление","Редукция"],correct:0,exp:"С.о. се повишава → <strong>окисление</strong>."},
+{q:"Процесът Cu: +2 → 0 представлява:",opts:["Окисление","Редукция"],correct:1,exp:"С.о. се понижава → <strong>редукция</strong>."},
+{q:"В реакцията 2Al + 3Cl₂ → 2AlCl₃, Cl₂ е:",opts:["Окислител","Редуктор"],correct:0,exp:"Cl приема e⁻ (0→−1) → Cl₂ е <strong>окислител</strong>."},
+{q:"В реакцията 2Al + 3Cl₂ → 2AlCl₃, Al е:",opts:["Окислител","Редуктор"],correct:1,exp:"Al отдава e⁻ (0→+3) → Al е <strong>редуктор</strong>."},
+{q:"В реакцията Cl₂ + 2KBr → 2KCl + Br₂, Cl₂ е:",opts:["Окислител","Редуктор"],correct:0,exp:"Cl приема e⁻ (0→−1) → <strong>окислител</strong>."},
+{q:"В реакцията 2Mg + CO₂ → 2MgO + C, CO₂ е:",opts:["Окислител","Редуктор"],correct:0,exp:"C приема e⁻ (+4→0) → CO₂ е <strong>окислител</strong>."},
+],
+
+// --- ACTIVITY SERIES (type: "activity") ---
+activity: [
+{q:"Протича ли реакция?",formula:"Cu + AgNO₃ →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Cu е по-вляво от Ag → <strong>реакцията протича</strong>."},
+{q:"Протича ли реакция?",formula:"Ag + AlCl₃ →",correct:1,opts:["Да, протича","Не, не протича"],exp:"Ag е по-вдясно от Al → <strong>не протича</strong>."},
+{q:"Протича ли реакция?",formula:"Fe + CuSO₄ →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Fe е по-вляво от Cu → <strong>протича</strong>."},
+{q:"Протича ли реакция?",formula:"Pb + ZnSO₄ →",correct:1,opts:["Да, протича","Не, не протича"],exp:"Pb е по-вдясно от Zn → <strong>не протича</strong>."},
+{q:"Протича ли реакция?",formula:"Zn + HCl(разр.) →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Zn е преди H → <strong>реагира с разредена киселина</strong>."},
+{q:"Протича ли реакция?",formula:"Cu + HCl(разр.) →",correct:1,opts:["Да, протича","Не, не протича"],exp:"Cu е след H → <strong>не реагира</strong> с разредена киселина."},
+{q:"Протича ли реакция?",formula:"Mg + Pb(NO₃)₂ →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Mg е по-вляво от Pb → <strong>протича</strong>."},
+{q:"Протича ли реакция?",formula:"Ag + CuSO₄ →",correct:1,opts:["Да, протича","Не, не протича"],exp:"Ag е по-вдясно от Cu → <strong>не протича</strong>."},
+{q:"Протича ли реакция?",formula:"Mg + H₂SO₄(разр.) →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Mg е преди H → <strong>реагира</strong>."},
+{q:"Протича ли реакция?",formula:"Au + HCl(разр.) →",correct:1,opts:["Да, протича","Не, не протича"],exp:"Au е след H → <strong>не реагира</strong>."},
+{q:"Протича ли реакция?",formula:"Zn + Pb(NO₃)₂ →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Zn е по-вляво от Pb → <strong>протича</strong>."},
+{q:"Протича ли реакция?",formula:"Cu + FeCl₂ →",correct:1,opts:["Да, протича","Не, не протича"],exp:"Cu е по-вдясно от Fe → <strong>не протича</strong>."},
+{q:"Протича ли реакция?",formula:"Fe + HCl(разр.) →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Fe е преди H → <strong>реагира</strong>."},
+{q:"Протича ли реакция?",formula:"Al + CuSO₄ →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Al е по-вляво от Cu → <strong>протича</strong>."},
+{q:"Протича ли реакция?",formula:"Ni + AgNO₃ →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Ni е по-вляво от Ag → <strong>протича</strong>."},
+{q:"Протича ли реакция?",formula:"Pb + CuSO₄ →",correct:0,opts:["Да, протича","Не, не протича"],exp:"Pb е по-вляво от Cu → <strong>протича</strong>."},
+{q:"Протича ли реакция?",formula:"Sn + ZnSO₄ →",correct:1,opts:["Да, протича","Не, не протича"],exp:"Sn е по-вдясно от Zn → <strong>не протича</strong>."},
+{q:"В кой ред металите са подредени по намаляване на редукционната способност?",opts:["Mg, Co, Hg","Hg, Mg, Co","Co, Mg, Hg","Hg, Co, Mg"],correct:0,exp:"Mg е най-активен, после Co, после Hg → <strong>Mg, Co, Hg</strong>."},
+{q:"В коя група и двата метала реагират с разредени киселини?",opts:["Cu, Ag","Mg, Fe","Fe, Cu","Al, Ag"],correct:1,exp:"Mg и Fe са преди H → <strong>и двата реагират</strong>."},
+{q:"В коя група веществата НЕ взаимодействат помежду си?",opts:["Cu и FeCl₂","Zn и CuSO₄","Pb и AgNO₃","Fe и Pb(NO₃)₂"],correct:0,exp:"Cu е по-вдясно от Fe → <strong>не протича</strong>."},
+],
+
+// --- ELECTROLYSIS (type: "electro") ---
+electro: [
+{q:"При електролиза на воден разтвор на AgNO₃ на катода се отделя:",opts:["Ag","H₂","Na","O₂"],correct:0,exp:"Ag е след H → на катода се отделя <strong>метал (Ag)</strong>."},
+{q:"При електролиза на воден разтвор на NaCl на катода се отделя:",opts:["Na","H₂","Cl₂","O₂"],correct:1,exp:"Na е преди Al → на катода <strong>H₂</strong>."},
+{q:"При електролиза на воден разтвор на коя сол НЕ се отделя водород на катода?",opts:["AgNO₃","KI","MgSO₄","ZnCl₂"],correct:0,exp:"Ag е след H → на катода се отделя <strong>Ag, не H₂</strong>."},
+{q:"При електролиза на воден разтвор на CuSO₄ на катода се отделя:",opts:["Cu","H₂","S","O₂"],correct:0,exp:"Cu е след H → <strong>Cu</strong>."},
+{q:"При електролиза на воден разтвор на MgSO₄ на катода се отделя:",opts:["Mg","H₂","S","O₂"],correct:1,exp:"Mg е преди Al → <strong>H₂</strong>."},
+{q:"При рафиниране на мед, анодът е:",opts:["Чиста мед","Нечиста (черна) мед","Платинен електрод","Графитен електрод"],correct:1,exp:"<strong>Нечистата мед</strong> е анод — разтваря се."},
+{q:"При рафиниране на мед, електролитът е:",opts:["NaCl разтвор","CuSO₄ разтвор","HCl разтвор","H₂O"],correct:1,exp:"Електролитът е разтвор на <strong>CuSO₄</strong>."},
+{q:"На анода винаги протича:",opts:["Окисление","Редукция","И двете","Нито едно"],correct:0,exp:"<strong>Анод = окисление</strong> (винаги)."},
+{q:"На катода винаги протича:",opts:["Окисление","Редукция","И двете","Нито едно"],correct:1,exp:"<strong>Катод = редукция</strong> (винаги)."},
+{q:"Галваничният елемент:",opts:["Произвежда ток чрез ОВР","Изисква външен ток","Не е свързан с ОВР","Извършва електролиза"],correct:0,exp:"Галваничният елемент <strong>произвежда ток</strong> чрез спонтанна ОВР."},
+{q:"Електролизата е процес, при който:",opts:["ОВР произвежда ток","ОВР протича под действие на външен ток","Веществата се разтварят","Йони се образуват"],correct:1,exp:"Електролиза — ОВР под действие на <strong>външен ток</strong>."},
+{q:"При електролиза на воден разтвор на FeSO₄ на катода:",opts:["Само Fe","Само H₂","И Fe, и H₂","Нищо"],correct:2,exp:"Fe е между Al и H → <strong>и Fe, и H₂</strong>."},
+{q:"При електролиза на разтвор на KBr, на катода се отделя:",opts:["K","H₂","Br₂","O₂"],correct:1,exp:"K е преди Al → <strong>H₂</strong>."},
+{q:"При електролиза на стопилка (не разтвор!) на NaCl, на катода се отделя:",opts:["H₂","Na","Cl₂","O₂"],correct:1,exp:"В стопилка няма вода → <strong>Na</strong>."},
+{q:"При рафиниране на мед, чистата мед е:",opts:["Анод","Катод","Електролит","Не участва"],correct:1,exp:"Чистата мед се утаява на <strong>катода</strong>."},
+{q:"При електролиза на воден разтвор на CuCl₂, на катода се отделя:",opts:["Cu","H₂","Cl₂","O₂"],correct:0,exp:"Cu е след H → <strong>Cu</strong>."},
+],
+
+// --- CONCEPTUAL (type: "concept") ---
+concept: [
+{q:"Какво е окисление?",opts:["Приемане на електрони","Отдаване на електрони","Понижаване на с.о.","Приемане на протони"],correct:1,exp:"Окисление = <strong>отдаване на електрони</strong>, с.о. се повишава."},
+{q:"Какво е редукция?",opts:["Отдаване на електрони","Приемане на електрони","Повишаване на с.о.","Отдаване на протони"],correct:1,exp:"Редукция = <strong>приемане на електрони</strong>, с.о. се понижава."},
+{q:"Окислителят в една ОВР:",opts:["Отдава електрони","Приема електрони","Не участва в преноса на e⁻","Повишава с.о."],correct:1,exp:"Окислителят <strong>приема електрони</strong> (сам се редуцира)."},
+{q:"Редукторът в една ОВР:",opts:["Приема електрони","Отдава електрони","Понижава с.о.","Не участва"],correct:1,exp:"Редукторът <strong>отдава електрони</strong> (сам се окислява)."},
+{q:"Степента на окисление на елемент в просто вещество е:",opts:["+1","−1","0","+2"],correct:2,exp:"В простите вещества (Na, O₂, Cl₂) с.о. = <strong>0</strong>."},
+{q:"Кое е вярно за анода?",opts:["На анода протича редукция","На анода протича окисление","На анода се утаява метал","Анодът е отрицателен в електролизата"],correct:1,exp:"Анод = <strong>окисление</strong> (винаги)."},
+{q:"Кое е вярно за катода?",opts:["На катода протича окисление","На катода протича редукция","Катодът се разтваря","Катодът е положителен в галваничен елемент"],correct:1,exp:"Катод = <strong>редукция</strong> (винаги)."},
+{q:"При ОВР общият брой отдадени електрони е:",opts:["По-голям от приетите","По-малък от приетите","Равен на приетите","Не може да се определи"],correct:2,exp:"Броят на отдадените e⁻ е <strong>равен</strong> на приетите (запазване на заряда)."},
+{q:"Кое НЕ е пример за ОВР?",opts:["Горене","Корозия","Неутрализация","Фотосинтеза"],correct:2,exp:"Неутрализацията е реакция на обмен — <strong>не е ОВР</strong>."},
+{q:"Степента на окисление на кислорода обикновено е:",opts:["+2","−1","−2","0"],correct:2,exp:"O обикновено е <strong>−2</strong> (с изключение на пероксиди и F₂O)."},
+{q:"Степента на окисление на водорода в съединения с неметали е:",opts:["+1","−1","0","+2"],correct:0,exp:"H с неметали = <strong>+1</strong>."},
+{q:"Степента на окисление на водорода в хидриди на метали (NaH) е:",opts:["+1","−1","0","+2"],correct:1,exp:"H в метални хидриди = <strong>−1</strong>."},
+{q:"Сумата от степените на окисление в неутрална молекула е:",opts:["+1","−1","0","+2"],correct:2,exp:"В неутрална молекула сумата = <strong>0</strong>."},
+]
+};
+
+// Categories metadata
+const catMeta = {
+  ox_choice: {name:"Степени на окисление", badge:"cat-ox", icon:"🔢"},
+  classify: {name:"ОВР / не ОВР", badge:"cat-classify", icon:"⚡"},
+  role: {name:"Окислител / Редуктор", badge:"cat-role", icon:"🎭"},
+  activity: {name:"Ред на активност", badge:"cat-activity", icon:"📊"},
+  electro: {name:"Електролиза", badge:"cat-electro", icon:"🔋"},
+  concept: {name:"Теория", badge:"cat-concept", icon:"📖"},
+};
+
+// ============================================================
+// TEST ENGINE
+// ============================================================
+
+const TOTAL_Q = 20;
+let questions = [];
+let currentQ = 0;
+let answers = []; // {selected, correct, wasRight}
+let timerInterval;
+let startTime;
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+function buildQuestionPool() {
+  // Pick proportionally from each category
+  const pool = [];
+  const picks = {ox_choice:4, classify:5, role:3, activity:3, electro:3, concept:2};
+  for (const [cat, count] of Object.entries(picks)) {
+    const shuffled = shuffle(DB[cat]);
+    for (let i = 0; i < Math.min(count, shuffled.length); i++) {
+      pool.push({...shuffled[i], cat});
+    }
+  }
+  return shuffle(pool);
+}
+
+function startTest() {
+  questions = buildQuestionPool();
+  currentQ = 0;
+  answers = [];
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('resultsArea').classList.add('hidden');
+  document.getElementById('testArea').classList.remove('hidden');
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+  renderQuestion();
+}
+
+function updateTimer() {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const s = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('timer').textContent = m + ':' + s;
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const meta = catMeta[q.cat];
+  const container = document.getElementById('questionContainer');
+  
+  // Progress
+  document.getElementById('progressFill').style.width = (currentQ / TOTAL_Q * 100) + '%';
+  document.getElementById('progressText').textContent = (currentQ + 1) + '/' + TOTAL_Q;
+
+  let html = `<div class="question-card">`;
+  html += `<span class="q-badge ${meta.badge}">${meta.icon} ${meta.name}</span>`;
+  html += `<div class="q-number">Въпрос ${currentQ + 1} от ${TOTAL_Q}</div>`;
+  html += `<div class="q-text">${q.q}</div>`;
+  
+  if (q.formula) {
+    html += `<div class="q-formula">${q.formula}</div>`;
+  }
+
+  html += `<div class="options" id="optionsArea">`;
+  const letters = ['А','Б','В','Г'];
+  q.opts.forEach((opt, i) => {
+    html += `<div class="option" onclick="selectOption(this, ${i})" data-idx="${i}">
+      <div class="letter">${letters[i]}</div>
+      <div>${opt}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  
+  html += `<div class="explanation" id="qExp"></div>`;
+  html += `<div class="q-nav">
+    <button class="q-nav-btn btn-check" id="btnCheck" onclick="checkAnswer()" disabled>Провери</button>
+    <button class="q-nav-btn btn-next hidden" id="btnNext" onclick="nextQuestion()">${currentQ < TOTAL_Q - 1 ? 'Следващ →' : 'Виж резултати →'}</button>
+  </div>`;
+  html += `</div>`;
+  
+  container.innerHTML = html;
+}
+
+let selectedIdx = -1;
+
+function selectOption(el, idx) {
+  if (el.closest('.question-card').classList.contains('answered')) return;
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedIdx = idx;
+  document.getElementById('btnCheck').disabled = false;
+}
+
+function checkAnswer() {
+  const q = questions[currentQ];
+  const isCorrect = selectedIdx === q.correct;
+  
+  answers.push({
+    qIdx: currentQ,
+    selected: selectedIdx,
+    correct: q.correct,
+    wasRight: isCorrect,
+    cat: q.cat
+  });
+
+  // Show result
+  const card = document.querySelector('.question-card');
+  card.classList.add('answered');
+  
+  document.querySelectorAll('.option').forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === q.correct) o.classList.add('correct-ans');
+    if (i === selectedIdx && !isCorrect) o.classList.add('wrong-ans');
+  });
+
+  const exp = document.getElementById('qExp');
+  exp.innerHTML = (isCorrect ? '✅ Правилно! ' : '❌ Грешно. ') + q.exp;
+  exp.className = `explanation show ${isCorrect ? 'right' : 'wrong'}`;
+  
+  document.getElementById('btnCheck').classList.add('hidden');
+  document.getElementById('btnNext').classList.remove('hidden');
+}
+
+function nextQuestion() {
+  currentQ++;
+  selectedIdx = -1;
+  if (currentQ >= TOTAL_Q) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  clearInterval(timerInterval);
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsed / 60);
+  const s = elapsed % 60;
+  const timeStr = m > 0 ? `${m} мин ${s} сек` : `${s} сек`;
+  
+  const correct = answers.filter(a => a.wasRight).length;
+  const pct = Math.round(correct / TOTAL_Q * 100);
+  
+  let icon, cls, msg;
+  if (pct >= 90) { icon = '🏆'; cls = 'great'; msg = 'Отличен резултат! Подготовката е на ниво!'; }
+  else if (pct >= 70) { icon = '🎉'; cls = 'great'; msg = 'Много добре! Още малко и ще е перфектно!'; }
+  else if (pct >= 50) { icon = '📚'; cls = 'ok'; msg = 'Добро начало, но има какво да се повтори.'; }
+  else { icon = '💪'; cls = 'low'; msg = 'Не се отчайвай! Върни се към подготовката и опитай пак.'; }
+
+  document.getElementById('testArea').classList.add('hidden');
+  const ra = document.getElementById('resultsArea');
+  ra.classList.remove('hidden');
+
+  // Category breakdown
+  const catStats = {};
+  for (const a of answers) {
+    if (!catStats[a.cat]) catStats[a.cat] = {c: 0, t: 0};
+    catStats[a.cat].t++;
+    if (a.wasRight) catStats[a.cat].c++;
+  }
+
+  let catHtml = '';
+  for (const [cat, st] of Object.entries(catStats)) {
+    const cm = catMeta[cat];
+    const cp = Math.round(st.c / st.t * 100);
+    const col = cp >= 70 ? 'var(--accent3)' : cp >= 50 ? 'var(--accent2)' : 'var(--red)';
+    catHtml += `<div class="cat-stat"><span class="cat-name">${cm.icon} ${cm.name}</span><span style="color:${col};font-weight:800">${st.c}/${st.t}</span></div>`;
+  }
+
+  // Review
+  let reviewHtml = '';
+  answers.forEach((a, i) => {
+    const q = questions[i];
+    const letters = ['А','Б','В','Г'];
+    const revCls = a.wasRight ? 'rev-correct' : 'rev-wrong';
+    reviewHtml += `<div class="review-item ${revCls}">
+      <div class="rev-q">${i+1}. ${q.q}${q.formula ? ' <span style="color:var(--accent2)">' + q.formula + '</span>' : ''}</div>
+      <div class="rev-answer">`;
+    if (a.wasRight) {
+      reviewHtml += `✅ Твоят отговор: <span class="expected">${letters[a.selected]}) ${q.opts[a.selected]}</span>`;
+    } else {
+      reviewHtml += `❌ Твоят отговор: <span class="got">${letters[a.selected]}) ${q.opts[a.selected]}</span> · Правилно: <span class="expected">${letters[a.correct]}) ${q.opts[a.correct]}</span>`;
+    }
+    reviewHtml += `</div></div>`;
+  });
+
+  ra.innerHTML = `
+    <div class="results">
+      <div class="results-icon">${icon}</div>
+      <h2>Резултати</h2>
+      <div class="score-big ${cls}">${pct}%</div>
+      <div class="msg">${msg}</div>
+      <div class="results-stats">
+        <div class="stat-box"><div class="num" style="color:var(--accent3)">${correct}</div><div class="lbl">Верни</div></div>
+        <div class="stat-box"><div class="num" style="color:var(--red)">${TOTAL_Q - correct}</div><div class="lbl">Грешни</div></div>
+        <div class="stat-box"><div class="num">${timeStr}</div><div class="lbl">Време</div></div>
+      </div>
+      <div class="cat-breakdown">${catHtml}</div>
+      <div class="results-btns">
+        <button class="start-btn" onclick="startTest()" style="font-size:1em;padding:14px 32px">🔄 Нов тест</button>
+        <a href="index.html" class="start-btn" style="font-size:1em;padding:14px 32px;background:linear-gradient(135deg,var(--accent4),#3b82f6);text-decoration:none">📖 Към подготовката</a>
+      </div>
+    </div>
+    <div class="review">
+      <h3>Преглед на отговорите</h3>
+      ${reviewHtml}
+    </div>
+  `;
+
+  if (pct >= 70) celebrate();
+}
+
+function celebrate(){
+  const c=document.getElementById('confetti'),cols=['#a855f7','#ffd93d','#6bcb77','#4d96ff','#ff6b6b','#6366f1'];
+  for(let i=0;i<70;i++){const d=document.createElement('div'),sz=4+Math.random()*10;d.style.cssText=`position:absolute;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};left:${Math.random()*100}%;top:-10px;animation:cFall ${1.5+Math.random()*2}s ease-out forwards;animation-delay:${Math.random()*.7}s;opacity:.9`;c.appendChild(d)}
+  setTimeout(()=>{c.innerHTML=''},5000);
+  if(!document.getElementById('c-style')){const s=document.createElement('style');s.id='c-style';s.textContent='@keyframes cFall{0%{transform:translateY(0) rotate(0);opacity:.9}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}';document.head.appendChild(s)}
+}
+</script>
+</body>
+</html>
